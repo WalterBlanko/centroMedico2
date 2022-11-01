@@ -1,0 +1,7 @@
+<div>
+    <div *ngFor="let medic of service.medicos | keyvalue">
+        <ul>
+            <li>{{ medic.value['PNOMBRE_MEDICO'] }} {{ medic.value['APATERNO_MEDICO'] }} - {{ medic.value['CORREO_MEDICO'] }} - {{ medic.value['PASSWORD_MEDICO'] }}</li>
+        </ul>
+    </div>
+</div>

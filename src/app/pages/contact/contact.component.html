@@ -1,0 +1,26 @@
+<body>
+    <div>
+        <h2>¿Tuviste algún problema? Llene los campos y lo contactaremos lo más pronto posible</h2>
+    </div>
+    <div>
+        <form>
+            <div>
+                <label for="email">Ingrese su correo:</label>
+                <input type="email" name="email" placeholder="Correo electronico">
+            </div>
+            <div>
+                <label for="rut">Ingrese su rut:</label>
+                <input type="text" name="rut" placeholder="XXXXXXXX-X">
+            </div>
+            <div>
+                <label for="message">Ingrese su mensaje:</label>
+                <textarea name="message" cols="30" rows="10" placeholder="Escriba su mensaje aquí"></textarea>
+            </div>
+            <div>
+                <button type="submit">Enviar</button>
+                <button type="reset">Limpiar campos</button>
+                <button [routerLink]="['/']">Cancelar</button>
+            </div>
+        </form>
+    </div>
+</body>
