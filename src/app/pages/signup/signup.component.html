@@ -1,62 +1,56 @@
 <body>
-    <h1>Registrarse</h1>
-    <div>
-        <form>
-            <div>
-                <fieldset>
-                    <label for="gender">Género:</label>
-                    <label for="masculine"><input type="radio" name="masculine">Masculino</label>
-                    <label for="femenine"><input type="radio" name="femenine">Femenino</label>
-                </fieldset>
-            </div>
-            <div>
-                <label for="rut">Ingrese su rut:</label>
-                <input type="text" name="rut" placeholder="XXXXXXXX-X">
-            </div>
-            <div>
-                <label for="firstName">Ingrese su primer nombre:</label>
-                <input type="text" name="firstName" placeholder="Primer nombre">
-            </div>
-            <div>
-                <label for="secondName">Ingrese su segundo nombre:</label>
-                <input type="text" name="secondName" placeholder="Segundo nombre">
-            </div>
-            <div>
-                <label for="firstLastName">Ingrese su apellido paterno:</label>
-                <input type="text" name="firstLastName" placeholder="Apellido paterno">
-            </div>
-            <div>
-                <label for="secondLastName">Ingrese su apellido materno:</label>
-                <input type="text" name="secondLastName" placeholder="Apellido materno">
-            </div>
-            <div>
-                <label for="cellphone">Ingrese su número de celular:</label>
-                <input type="tel" name="cellphone" placeholder="Número de celular">
-            </div>
-            <div>
-                <label for="dateBorn">Fecha de nacimiento:</label>
-                <input type="date" name="dateBorn">
-            </div>
-            <div>
-                <label for="email">Ingrese su correo electronico:</label>
-                <input type="email" name="email" placeholder="Correo electronico">
-            </div>
-            <div>
-                <label for="password">Ingrese su contraseña:</label>
-                <input type="password" name="password" placeholder="Contraseña">
-            </div>
-            <div>
-                <label for="confirmPassword">Confirme su contraseña:</label>
-                <input type="password" name="confirmPassword" placeholder="Confirme su contraseña">
-            </div>
-            <div>
-                <button type="submit">Registrarme</button>
-                <button type="reset">Limpiar campos</button>
-                <button [routerLink]="['/']">Cancelar</button>
-            </div>
-        </form>
+    <div class="center">
         <div>
-            <label>¿Ya tienes cuenta? <a>Inicia sesión aquí</a></label>
+            <form class="form__space" [formGroup]="signUpForm" (ngSubmit)="signUp(signUpForm.value)">
+                <h1 style="text-align: center;">Registrarse</h1>
+                <!-- <div>
+                    <fieldset>
+                        <label for="gender">Género:</label>
+                        <label for="masculine"><input type="radio" id="genero" name="masculine" value="M">Masculino</label>
+                        <label for="femenine"><input type="radio" id="genero" name="femenine" value="F">Femenino</label>
+                    </fieldset>
+                </div> -->
+                <div>
+                    <div class="center" style="margin-bottom: 15px">
+                        <input class="form__input" type="text" name="rut" placeholder="XXXXXXXX-X" formControlName="rut">
+                    </div>
+                    <div class="center" style="margin-bottom: 15px">
+                        <input class="form__input" type="text" name="firstName" placeholder="Primer nombre" formControlName="pnombre">
+                    </div>
+                    <div class="center" style="margin-bottom: 15px">
+                        <input class="form__input" type="text" name="secondName" placeholder="Segundo nombre" formControlName="snombre">
+                    </div>
+                    <div class="center" style="margin-bottom: 15px">
+                        <input class="form__input" type="text" name="firstLastName" placeholder="Apellido paterno" formControlName="apaterno">
+                    </div>
+                    <div class="center" style="margin-bottom: 15px">
+                        <input class="form__input" type="text" name="secondLastName" placeholder="Apellido materno" formControlName="amaterno">
+                    </div>
+                    <div class="center" style="margin-bottom: 15px">
+                        <input class="form__input" type="tel" name="cellphone" placeholder="Número de celular" formControlName="celular">
+                    </div>
+                    <div class="center" style="margin-bottom: 15px">
+                        <input class="form__input" type="date" name="dateBorn" formControlName="fecnac">
+                    </div>
+                    <div class="center" style="margin-bottom: 15px">
+                        <input class="form__input" type="email" name="email" placeholder="Correo electronico" formControlName="email">
+                    </div>
+                    <div class="center" style="margin-bottom: 15px">
+                        <input class="form__input" type="password" name="password" placeholder="Contraseña" formControlName="pass1">
+                    </div>
+                    <div class="center" style="margin-bottom: 15px">
+                        <input class="form__input" type="password" name="confirmPassword" placeholder="Confirme su contraseña" formControlName="pass2">
+                    </div>
+                    <div class="form__div_button">
+                        <button class="form__button" type="submit">Registrarme</button>
+                        <button class="form__button" type="reset">Limpiar campos</button>
+                        <button class="form__button" [routerLink]="['/']">Cancelar</button>
+                    </div>
+                    <div>
+                        <label>¿Ya tienes cuenta? <a [routerLink]="['/login']">Inicia sesión aquí</a></label>
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </body>

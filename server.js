@@ -64,6 +64,9 @@ app.get('/medico', function (req, res) {
     });
 });
 
+// Consultar médico por su ID
+app.get();
+
 app.listen(4201, 'localhost', function() {
     console.log('El servidor está en: http://localhost:4201/medico')
 });

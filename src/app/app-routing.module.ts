@@ -27,6 +27,9 @@ const routes: Routes = [
   {
     path: 'signup',
     component: SignupComponent
+  },{
+    path: 'forget',
+    component: ForgetComponent
   },
   {
     path: 'contact',
@@ -51,6 +54,14 @@ const routes: Routes = [
   {
     path: 'patient',
     component: PatientComponent
+  },
+  {
+    path: 'admin',
+    component: AdminComponent
+  },
+  {
+    path: 'msg-send',
+    component: MsgSendComponent
   },
   {
     path: '**',

@@ -11,7 +11,7 @@ export class DatabaseService {
     this.cargarMedicos();
   }
 
-  private cargarMedicos() {
+  public cargarMedicos() {
     this.http.get('http://localhost:4201/medico').subscribe( (res: any) => {
       this.medicos = res;
     });
