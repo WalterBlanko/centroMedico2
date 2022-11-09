@@ -1,7 +1,7 @@
 npm i express && npm i body-parser && npm i cors && npm i oracledb
 
 Para activar host de la BD activar:
-node serve.js <- se encuentra en ./centroMedico2
+node db.js <- se encuentra en ./centroMedico2
 
 Para conectar NodeJS con Angular hay que crear un nuevo servicio
 ng g s services/database

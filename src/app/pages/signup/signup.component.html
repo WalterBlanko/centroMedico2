@@ -3,13 +3,6 @@
         <div>
             <form class="form__space" [formGroup]="signUpForm" (ngSubmit)="signUp(signUpForm.value)">
                 <h1 style="text-align: center;">Registrarse</h1>
-                <!-- <div>
-                    <fieldset>
-                        <label for="gender">Género:</label>
-                        <label for="masculine"><input type="radio" id="genero" name="masculine" value="M">Masculino</label>
-                        <label for="femenine"><input type="radio" id="genero" name="femenine" value="F">Femenino</label>
-                    </fieldset>
-                </div> -->
                 <div>
                     <div class="center" style="margin-bottom: 15px">
                         <input class="form__input" type="text" name="rut" placeholder="XXXXXXXX-X" formControlName="rut">

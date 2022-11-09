@@ -19,6 +19,7 @@ import { PatientComponent } from './pages/personal/patient/patient.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { LoginComponent } from './pages/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { TestingComponent } from './pages/testing/testing.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +36,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
     SecretaryComponent,
     PatientComponent,
     SignupComponent,
-    LoginComponent
+    LoginComponent,
+    TestingComponent
   ],
   imports: [
     BrowserModule,

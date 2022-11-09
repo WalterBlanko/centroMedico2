@@ -1,0 +1,58 @@
+<body>
+    <!-- <section>
+        <h2>Obtener todos los médicos</h2>
+        <button (click)="getMedicos()">Click</button>
+    </section>
+
+    <section>
+        <h2>Obtener médico por ID</h2>
+        <form (ngSubmit)="getMedicById()" [formGroup]="medicIdForm">
+            <input formControlName="medicId" type="number" placeholder="Id de médico">
+            <input type="submit" value="Click">
+        </form>
+    </section>
+
+    <section>
+        <h2>Obtener comunas</h2>
+        <button (click)="getComunas()">Click</button>
+    </section>
+
+    <section>
+        <h2>Obtener comuna por ID</h2>
+        <form (ngSubmit)="getComunaById()" [formGroup]="comunaIdForm">
+            <input formControlName="comunaId" type="number" placeholder="Id de comuna">
+            <input type="submit" value="Click">
+        </form>
+    </section> -->
+
+    <section>
+        <form (ngSubmit)="addPatient()" [formGroup]="addPatientForm">
+            <br>
+            <input formControlName="rut_paciente" type="text" placeholder="rut_paciente">
+            <br>
+            <!-- <input formControlName="dv_paciente" type="text" placeholder="dv_paciente"> -->
+            <br>
+            <input formControlName="apaterno_paciente" type="text" placeholder="apaterno_paciente">
+            <br>
+            <input formControlName="amaterno_paciente" type="text" placeholder="amaterno_paciente">
+            <br>
+            <input formControlName="pnombre_paciente" type="text" placeholder="pnombre_paciente">
+            <br>
+            <input formControlName="snombre_paciente" type="text" placeholder="snombre_paciente">
+            <br>
+            <input formControlName="correo_paciente" type="email" placeholder="correo_paciente">
+            <br>
+            <input formControlName="password_paciente" type="password" placeholder="password_paciente">
+            <br>
+            <input type="submit" value="Agregar paciente">
+        </form>
+    </section>
+    <button (click)="getPacientes()">Mostrar pacientes</button>
+    <!-- <section>
+        <form (ngSubmit)="agregarComuna()" [formGroup]="comunaForm">
+            <input formControlName="nombre_comuna" type="text" placeholder="Nombre de la comuna">
+            <input type="submit" value="Agregar comuna">
+        </form>
+        <button (click)="getComunas()">Mostrar comunas</button>
+    </section> -->
+</body>
