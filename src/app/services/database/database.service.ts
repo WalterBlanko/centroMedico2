@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, retry, throwError } from 'rxjs';
-import { Comuna } from 'src/app/models/comuna';
 import { Medico } from 'src/app/models/medico';
 import { Pacient } from 'src/app/models/pacient';
-import { json } from 'body-parser';
-
 
 @Injectable({
   providedIn: 'root'
@@ -17,8 +14,14 @@ export class DatabaseService {
   constructor(private http: HttpClient) {
   }
 
+  // Get pacientes
   getPacientes(): Observable<Pacient> {
     return this.http.get<Pacient>(this.baseurl + '/pacientes/').pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Get medical centers
+  getCenters() {
+    return this.http.get<any>(this.baseurl + '/medicalcenters/').pipe(retry(3), catchError(this.errorHandl));
   }
 
   // Get medic
@@ -26,30 +29,19 @@ export class DatabaseService {
     return this.http.get<Medico>(this.baseurl + '/medicos/').pipe(retry(3), catchError(this.errorHandl));
   }
 
-  // Get comuna by ID
-  getMedico(id_medico: number): Observable<Medico> {
-    return this.http.get<Medico>(this.baseurl + '/medicos/' + id_medico).pipe(retry(3), catchError(this.errorHandl));
-  }
-
-  // Get comunas
-  getComunas(): Observable<Comuna> {
-    return this.http.get<Comuna>(this.baseurl + '/comunas/').pipe(retry(3), catchError(this.errorHandl));
-  }
-
-  // Get comuna by ID
-  getComuna(id: number): Observable<Comuna> {
-    return this.http.get<Comuna>(this.baseurl + '/comunas/' + id).pipe(retry(3), catchError(this.errorHandl));
-  }
-
   // Add pacient
   addPacient(user: Pacient): Observable<Pacient> {
-    return this.http.post<Pacient>(this.baseurl + '/addpaciente/', user);
+    return this.http.post<Pacient>(this.baseurl + '/addpaciente/', user).pipe(retry(3), catchError(this.errorHandl));
   }
 
-  // Add comuna
-  addComuna(nombre_comuna: string) {
-    const body = JSON.stringify(nombre_comuna);
-    return this.http.post<Comuna>(this.baseurl + 'comunas/'+ nombre_comuna, {}).pipe(retry(3), catchError(this.errorHandl));
+  // Login
+  login(correo_paciente: string) {
+    return this.http.get<any>(this.baseurl + '/searchuser/' + correo_paciente).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Forget
+  forget(correo_paciente: string, password_paciente: string) {
+    return this.http.post(this.baseurl + '/changedata/' + correo_paciente + '&' + password_paciente, {}).pipe(retry(3), catchError(this.errorHandl));
   }
 
   // Error handling

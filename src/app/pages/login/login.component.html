@@ -1,15 +1,15 @@
 <body>
     <div class="center">
         <div class="form">
-            <form class="form__space" [formGroup]="loginForm" (ngSubmit)="onLogin(loginForm.value)">
+            <form class="form__space" [formGroup]="loginForm" (ngSubmit)="login()">
                 <div style="padding-top: 5px">
                     <h1>Iniciar sesión</h1>
                 </div>
                 <div style="margin-bottom: 15px">
-                    <input class="form__input" type="email" id="email" placeholder="Ingrese su correo" formControlName="email">
+                    <input class="form__input" type="email" id="correo_paciente" placeholder="Ingrese su correo" formControlName="correo_paciente">
                 </div>
                 <div>
-                    <input class="form__input" type="password" id="password" placeholder="Ingrese su contraseña" formControlName="password">
+                    <input class="form__input" type="password" id="password_paciente" placeholder="Ingrese su contraseña" formControlName="password_paciente">
                 </div>
                 <div class="form__div_button">
                     <button class="form__button" type="submit" [disabled]="loginForm.invalid">Iniciar sesión</button>

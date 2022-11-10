@@ -254,58 +254,10 @@ app.get('/comunas/:id_comuna', function (req, res) {
     });
 });
 
-// POST new comuna
-app.post('/addcomuna/:nombre_comuna', function(req, res) {
-    "use strict";
-    var nombre_comuna = req.params.nombre_comuna;
-
-    oracledb.getConnection(connAttrs, function (err, connection) {
-        if (err) {
-            // Error connecting to DB
-            res.set('Content-Type', 'application/json');
-            res.status(500).send(JSON.stringify({
-                status: 500,
-                message: "Error connecting to DB",
-                detailed_message: err.message
-            }));
-            return;
-        }
-        connection.execute("INSERT INTO comuna VALUES(sq_com.nextval, " + nombre_comuna + ")", {}, {
-            outFormat: oracledb.OBJECT // Return the result as Object
-        }, function (err, result) {
-            if (err) {
-                res.set('Content-Type', 'application/json');
-                res.status(500).send(JSON.stringify({
-                    status: 500,
-                    message: "Error getting the dba_tablespaces",
-                    detailed_message: err.message
-                }));
-            } else {
-                res.header('Access-Control-Allow-Origin', '*');
-                res.header('Access-Control-Allow-Headers', 'Content-Type');
-                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-                res.contentType('application/json').status(200);
-                res.send(JSON.stringify(result.rows));
-
-            }
-            // Release the connection
-            connection.release(
-                function (err) {
-                    if (err) {
-                        console.error(err.message);
-                    } else {
-                        console.log("GET /sendTablespace : Connection released");
-                    }
-                });
-        });
-    });
-});
-
-
 // Modificar contraseña de un usuario
-app.post('/updatePassPacient', function (req, res, next) {
-    var correo_paciente = req.body.correo_paciente;
-    var password_paciente = req.body.password_paciente;
+app.post('/changedata/:correo_paciente&:password_paciente', function (req, res, next) {
+    var correo_paciente = req.params.correo_paciente;
+    var password_paciente = req.params.password_paciente;
 
     oracledb.getConnection(connAttrs, function (err, connection) {
         if (err) {
@@ -319,7 +271,7 @@ app.post('/updatePassPacient', function (req, res, next) {
             return;
         }
 
-        connection.execute("update paciente set password_paciente = " + password_paciente + " where correo_paciente = " + correo_paciente + "", {}, {
+        connection.execute("update paciente set password_paciente = '" + password_paciente + "' where correo_paciente = '" + correo_paciente + "'", {}, {
             outFormat: oracledb.OBJECT // Return the result as Object
         }, function (err, result) {
             if (err) {
@@ -335,6 +287,9 @@ app.post('/updatePassPacient', function (req, res, next) {
                 res.contentType('application/json').status(200);
                 res.send(JSON.stringify("1"));
             }
+
+            connection.commit();
+
             // Release the connection
             connection.release(
                 function (err) {
@@ -348,60 +303,16 @@ app.post('/updatePassPacient', function (req, res, next) {
     });
 });
 
-// Modificar correo de un usuario
-app.post('/updatePassPacient', function (req, res, next) {
-    var correo_paciente = req.body.correo_paciente;
-    var newCorreo_paciente = req.body.newCorreo_paciente;
-
-    oracledb.getConnection(connAttrs, function (err, connection) {
-        if (err) {
-            // Error connecting to DB
-            res.set('Content-Type', 'application/json');
-            res.status(500).send(JSON.stringify({
-                status: 500,
-                message: "Error connecting to DB",
-                detailed_message: err.message
-            }));
-            return;
-        }
-
-        connection.execute("update paciente set correo_paciente = " + correo_paciente + " where correo_paciente = " + newCorreo_paciente + "", {}, {
-            outFormat: oracledb.OBJECT // Return the result as Object
-        }, function (err, result) {
-            if (err) {
-                res.header('Access-Control-Allow-Origin', '*');
-                res.header('Access-Control-Allow-Headers', 'Content-Type');
-                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-                res.contentType('application/json').status(200);
-                res.send(JSON.stringify(err.message + " " + motdepasse));
-            } else {
-                res.header('Access-Control-Allow-Origin', '*');
-                res.header('Access-Control-Allow-Headers', 'Content-Type');
-                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-                res.contentType('application/json').status(200);
-                res.send(JSON.stringify("1"));
-            }
-            // Release the connection
-            connection.release(
-                function (err) {
-                    if (err) {
-                        console.error(err.message);
-                    } else {
-                        console.log("POST /sendTablespace : Connection released");
-                    }
-                });
-        });
-    });
-});
-
-// :rut_paciente&:apaterno_paciente&:amaterno_paciente&:pnombre_paciente&:snombre_paciente&:correo_paciente&:password_paciente'
-// Crear un paciente
+// Registrar un paciente
 app.post('/addpaciente', function (req, res, next) {
     var rut_paciente = req.body.rut_paciente;
+    var genero_paciente = req.body.genero_paciente;
     var apaterno_paciente = req.body.apaterno_paciente;
     var amaterno_paciente = req.body.amaterno_paciente;
     var pnombre_paciente = req.body.pnombre_paciente;
     var snombre_paciente = req.body.snombre_paciente;
+    var num_paciente = req.body.num_paciente;
+    var fecnac_paciente = req.body.fecnac_paciente;
     var correo_paciente = req.body.correo_paciente;
     var password_paciente = req.body.password_paciente;
 
@@ -417,8 +328,7 @@ app.post('/addpaciente', function (req, res, next) {
             return;
         }
 
-        console.log(rut_paciente, apaterno_paciente, amaterno_paciente, pnombre_paciente, snombre_paciente, correo_paciente, password_paciente);
-        connection.execute("INSERT INTO paciente VALUES (TO_NUMBER(SUBSTR('"+ rut_paciente +"',1,INSTR('"+ rut_paciente +"','-')-1)), TO_CHAR(SUBSTR('"+ rut_paciente +"',INSTR('"+ rut_paciente +"','-')+1,1)), '"+ apaterno_paciente +"', '"+ amaterno_paciente +"', '"+ pnombre_paciente +"', '"+ snombre_paciente +"', '"+ correo_paciente +"', '"+ password_paciente +"')", { }, {
+        connection.execute("INSERT INTO paciente VALUES (TO_NUMBER(SUBSTR('" + rut_paciente + "',1,INSTR('" + rut_paciente + "','-')-1)), TO_CHAR(SUBSTR('" + rut_paciente + "',INSTR('" + rut_paciente + "','-')+1,1)), '" + genero_paciente + "','" + apaterno_paciente + "', '" + amaterno_paciente + "', '" + pnombre_paciente + "', '" + snombre_paciente + "', '" + num_paciente + "', '" + fecnac_paciente + "','" + correo_paciente + "', '" + password_paciente + "')", {}, {
             outFormat: oracledb.OBJECT // Return the result as Object
         }, function (err, result) {
             if (err) {
@@ -449,6 +359,133 @@ app.post('/addpaciente', function (req, res, next) {
         });
     });
 
+});
+
+// Login
+app.get('/searchuser/:correo', function (req, res) {
+    "use strict";
+    var correo = req.params.correo;
+    var email = correo.split('@')[1];
+    console.log(correo);
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+    if(email == 'centrogalenos.cl') {
+        connection.execute("SELECT correo_medico, password_medico FROM medico where correo_medico = '" + correo + "'", {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(result.rows));
+            }
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("GET /sendTablespace : Connection released");
+                    }
+                });
+        });
+
+    } else {
+        connection.execute("SELECT correo_paciente, password_paciente FROM paciente where correo_paciente = '" + correo + "'", {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(result.rows));
+            }
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("GET /sendTablespace : Connection released");
+                    }
+                });
+        });
+    }
+    });
+
+    
+});
+
+// Get medical Centers
+app.get('/medicalcenters/', function(req, res){
+    "use strict";
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+        connection.execute("SELECT * FROM sucursal s JOIN comuna c ON c.id_comuna = s.id_comuna", {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(result.rows));
+
+            }
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("GET /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
 });
 
 app.listen(3000, function () {
