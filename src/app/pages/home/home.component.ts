@@ -8,9 +8,21 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  constructor( public service: DatabaseService ) { }
+  public identified: boolean
+
+  constructor( public service: DatabaseService ) {
+    this.identified = false;
+  }
 
   ngOnInit(): void {
+  }
+
+  setLogin() {
+    this.identified = true;
+  }
+
+  setLogout() {
+    this.identified = false;
   }
 
 }

@@ -6,5 +6,18 @@ import { Component } from '@angular/core';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'centroMedico2';
+  public identified: boolean;
+
+  constructor() {
+    this.identified = false;
+  }
+
+  setLogin() {
+    this.identified = true;
+  }
+
+  setLogout() {
+    this.identified = false;
+  }
+
 }

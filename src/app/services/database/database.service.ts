@@ -3,6 +3,7 @@ import { HttpClient } from '@angular/common/http';
 import { catchError, Observable, retry, throwError } from 'rxjs';
 import { Medico } from 'src/app/models/medico';
 import { Pacient } from 'src/app/models/pacient';
+import { Request } from 'src/app/models/request';
 
 @Injectable({
   providedIn: 'root'
@@ -42,6 +43,11 @@ export class DatabaseService {
   // Forget
   forget(correo_paciente: string, password_paciente: string) {
     return this.http.post(this.baseurl + '/changedata/' + correo_paciente + '&' + password_paciente, {}).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Post request
+  addRequest(request: Request) {
+    return this.http.post(this.baseurl + '/addrequest/', request).pipe(retry(3), catchError(this.errorHandl));
   }
 
   // Error handling

@@ -10,8 +10,3 @@ export class Pacient {
     correo_paciente: string = "";
     password_paciente: string = "";
 }
-
-export class Credentials {
-    correo_paciente: string = "";
-    password_paciente: string = "";
-}

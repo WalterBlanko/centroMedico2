@@ -14,8 +14,14 @@ import { SecretaryComponent } from './pages/personal/secretary/secretary.compone
 import { PatientComponent } from './pages/personal/patient/patient.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { LoginComponent } from './pages/login/login.component';
+import { TestingComponent } from './pages/testing/testing.component';
+import { RequestComponent } from './pages/request/request.component';
 
 const routes: Routes = [
+  {
+    path: '',
+    component: RequestComponent
+  },
   {
     path: 'home',
     component: HomeComponent
@@ -40,7 +46,7 @@ const routes: Routes = [
     component: LocationsComponent
   },
   {
-    path: '',
+    path: 'Appointment',
     component: AppointmentComponent
   },
   {

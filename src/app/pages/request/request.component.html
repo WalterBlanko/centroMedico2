@@ -1,0 +1,21 @@
+<body>
+    <div>
+        <form [formGroup]="requestForm" (ngSubmit)="addRequest()">
+            <input type="text" formControlName="rut_paciente" placeholder="Ingrese su rut">
+            <br>
+            <label>Escoja tipo de solicitud:</label>
+            <div>
+                 <select name="requet" id="request" formControlName="tipo_solicitud">
+                    <option value="" selected disabled hidden>Seleccionar</option>
+                    <option value="Urgente">Urgente</option>
+                    <option value="Agendar">Agendar hora</option>
+                 </select>
+            </div>
+            <textarea name="requestText" id="requestText" formControlName="mensaje_solicitud" cols="30" rows="10" placeholder="Ingrese su solicitud:"></textarea>
+            <br>
+            <button type="submit">Enviar solicitud</button>
+            <button type="reset">Limpiar campos</button>
+            <button [routerLink]="['/home']">Cancelar</button>
+        </form>
+    </div>
+</body>

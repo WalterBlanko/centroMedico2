@@ -488,6 +488,59 @@ app.get('/medicalcenters/', function(req, res){
     });
 });
 
+// Post request
+app.post('/addrequest/', function (req, res, next) {
+    var tipo_solicitud = req.body.tipo_solicitud;
+    var mensaje_solicitud = req.body.mensaje_solicitud;
+    var rut_paciente = req.body.rut_paciente;
+
+    console.log(tipo_solicitud, mensaje_solicitud, rut_paciente);
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+
+        connection.execute("INSERT INTO solicitud VALUES (sq_soli.nextval, '" + tipo_solicitud + "', '" + mensaje_solicitud + "', 'Y', null, '" + rut_paciente + "')", {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(err.message));
+            } else {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify("Ingreso exitoso"));
+            }
+
+            connection.commit();
+
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("POST /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
+
+});
+
 app.listen(3000, function () {
     console.log("http://localhost:3000");
 });
