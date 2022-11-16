@@ -36,31 +36,33 @@ export class LoginComponent implements OnInit {
     this.db.login(email).forEach(element => {
       for(let i = 0; i < element.length; i++) {
         const data = element[i];
-        console.log(data);
 
-        if(pass != data.PASSWORD_PACIENTE) break;
-        if(pass != data.PASSWORD_MEDICO) break;
-
-        var loginData = {
-          "email": email
-        }
-
-        this.navegationsextras = {
-          state: {
-            data: loginData
-          }
-        }
-
-        if(pass == data.PASSWORD_PACIENTE) {
-          this.router.navigate(['/'], this.navegationsextras);
+        if(email == data.CORREO_PACIENTE && pass == data.PASSWORD_PACIENTE) {
+          this.navegation(email);
           break;
         }
 
-        if(pass == data.PASSWORD_MEDICO) {
-          this.router.navigate(['/'], this.navegationsextras);
+        if(email == data.CORREO_MEDICO && pass == data.PASSWORD_MEDICO) {
+          this.navegation(email);
           break;
         }
+
+        console.log('Correo/Contraseña incorrectos');
       }
     });
+  }
+
+  navegation(email: string) {
+    var loginData = {
+      "email": email
+    }
+
+    this.navegationsextras = {
+      state: {
+        data: loginData
+      }
+    }
+
+    this.router.navigate(['/'], this.navegationsextras);
   }
 }

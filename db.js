@@ -366,7 +366,6 @@ app.get('/searchuser/:correo', function (req, res) {
     "use strict";
     var correo = req.params.correo;
     var email = correo.split('@')[1];
-    console.log(correo);
 
     oracledb.getConnection(connAttrs, function (err, connection) {
         if (err) {
