@@ -4,6 +4,7 @@ import { catchError, Observable, retry, throwError } from 'rxjs';
 import { Medico } from 'src/app/models/medico';
 import { Pacient } from 'src/app/models/pacient';
 import { Request } from 'src/app/models/request';
+import { Confirm } from 'src/app/models/confirm';
 
 @Injectable({
   providedIn: 'root'
@@ -20,14 +21,29 @@ export class DatabaseService {
     return this.http.get<Pacient>(this.baseurl + '/pacientes/').pipe(retry(3), catchError(this.errorHandl));
   }
 
-  // Get medical centers
-  getCenters() {
-    return this.http.get<any>(this.baseurl + '/medicalcenters/').pipe(retry(3), catchError(this.errorHandl));
+  // Get medical centers by especiality id
+  getCenters(id: any) {
+    return this.http.get<any>(this.baseurl + '/medicalcenters/' + id).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Get doctors by sucursal id
+  getDoctors(id: any) {
+    return this.http.get<any>(this.baseurl + '/doctorbysucursal/' + id).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Get doctor agenda
+  getAgenda(id: any) {
+    return this.http.get<any>(this.baseurl + '/doctoragenda/' + id).pipe(retry(3), catchError(this.errorHandl));
   }
 
   // Get medic
   getMedicos(): Observable<Medico> {
     return this.http.get<Medico>(this.baseurl + '/medicos/').pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Get speciality
+  getSpeciality() {
+    return this.http.get<any>(this.baseurl + '/speciality/').pipe(retry(3), catchError(this.errorHandl));
   }
 
   // Add pacient
@@ -48,6 +64,12 @@ export class DatabaseService {
   // Post request
   addRequest(request: Request) {
     return this.http.post(this.baseurl + '/addrequest/', request).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Update agenda
+  confirmAgenda(user: Confirm) {
+    console.log(user);
+    return this.http.post(this.baseurl + '/agenda/', user).pipe(retry(3), catchError(this.errorHandl));
   }
 
   // Error handling

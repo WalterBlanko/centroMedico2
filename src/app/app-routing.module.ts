@@ -19,7 +19,11 @@ import { RequestComponent } from './pages/request/request.component';
 
 const routes: Routes = [
   {
-    path: '',
+    path: 'locations',
+    component: LocationsComponent
+  },
+  {
+    path: 'request',
     component: RequestComponent
   },
   {
@@ -46,7 +50,7 @@ const routes: Routes = [
     component: LocationsComponent
   },
   {
-    path: 'Appointment',
+    path: '',
     component: AppointmentComponent
   },
   {

@@ -1,8 +1,38 @@
 <div>
-    <h2>Nuestras sucursales</h2>
-    <div *ngFor="let i of sucursales">
-        <h3>{{ i.NOMBRE_SUCURSAL }}</h3>
-        <h4>{{ i.DIRECCION_SUCURSAL }}</h4>
-        <h5>{{ i.NOMBRE_COMUNA }}</h5>
+    <h2>Reservar hora</h2>
+    <div>
+        <form>
+            <label>Seleccione especialidad:</label>
+            <div>
+                 <select (input)="getSpeciality($event)">
+                    <option value="" selected disabled hidden>Seleccionar</option>
+                    <option *ngFor="let i of speciality" value="'{{ i.ID_ESPECIALIDAD }}'">{{ i.NOMBRE_ESPECIALIDAD }}</option>
+                 </select>
+
+                 <select (input)="getCenter($event)">
+                    <option value="" selected disabled hidden>Seleccionar</option>
+                    <option *ngFor="let i of sucursales" value="'{{ i.ID_SUCURSAL }}'">{{ i.NOMBRE_SUCURSAL }}</option>
+                 </select>
+
+                 <select (input)="getDoctor($event)">
+                    <option value="" selected disabled hidden>Seleccionar</option>
+                    <option *ngFor="let i of medicos" value="'{{ i.ID_MEDICO }}'">{{ i.PNOMBRE_MEDICO }} {{ i.APATERNO_MEDICO }}</option>
+                 </select>
+
+                 <table>
+                    <tr>
+                        <th>Fecha</th>
+                        <th>Hora</th>
+                    </tr>
+                    <tr *ngFor="let i of agenda">
+                        <td>{{ i.FECHA_AGENDA }}</td>
+                        <td>{{ i.HORA_AGENDA }}</td>
+                        <td><button (click)="getIdAgenda($event)" value="{{ i.ID_AGENDA }}">Elegir hora</button></td>
+                    </tr>
+                 </table>
+
+                 <button (click)="confirmHour()">Confirmar hora</button>
+            </div>
+        </form>
     </div>
 </div>

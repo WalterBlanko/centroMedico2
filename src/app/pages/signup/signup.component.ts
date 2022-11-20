@@ -38,6 +38,11 @@ export class SignupComponent implements OnInit {
     this.user = this.signUpForm.value;
     // console.log(this.user)
 
-    this.db.addPacient(this.user).subscribe();
+    try {
+      this.db.addPacient(this.user).subscribe();
+      this.router.navigate(['/']);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

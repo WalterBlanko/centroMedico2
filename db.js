@@ -442,7 +442,62 @@ app.get('/searchuser/:correo', function (req, res) {
 });
 
 // Get medical Centers
-app.get('/medicalcenters/', function(req, res){
+app.get('/medicalcenters/:especiality_id', function(req, res){
+    "use strict";
+    var especiality_id = req.params.especiality_id;
+    console.log(especiality_id);
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+        connection.execute(`
+            select 
+                s.ID_SUCURSAL,
+                s.NOMBRE_SUCURSAL 
+            from medico m join sucursal s on s.id_sucursal = m.id_sucursal
+            where m.id_especialidad = ${especiality_id}
+            group by s.nombre_sucursal, s.id_sucursal
+        `, {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(result.rows));
+
+            }
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("GET /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
+});
+
+// Get speciality
+app.get('/speciality/', function(req, res){
     "use strict";
 
     oracledb.getConnection(connAttrs, function (err, connection) {
@@ -456,7 +511,165 @@ app.get('/medicalcenters/', function(req, res){
             }));
             return;
         }
-        connection.execute("SELECT * FROM sucursal s JOIN comuna c ON c.id_comuna = s.id_comuna", {}, {
+        connection.execute(`SELECT * FROM especialidad`, {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(result.rows));
+
+            }
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("GET /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
+});
+
+// Get doctor by sucursal id
+app.get('/doctorbysucursal/:sucursal_id', function(req, res){
+    "use strict";
+    var sucursal_id = req.params.sucursal_id;
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+        connection.execute(`
+            select 
+                id_medico,
+                apaterno_medico,
+                amaterno_medico,
+                pnombre_medico,
+                snombre_medico
+            from medico
+            where id_sucursal = ${sucursal_id}`, {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(result.rows));
+
+            }
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("GET /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
+});
+
+// Get medical agenda
+app.get('/doctoragenda/:doctor_id', function(req, res){
+    "use strict";
+    var doctor_id = req.params.doctor_id;
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+        connection.execute(`
+        select
+            id_agenda,
+            fecha_agenda,
+            hora_agenda
+        from agenda
+        where id_medico = ${doctor_id}
+            and disponibilidad_agenda = 'Y'
+        order by 1`, {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(result.rows));
+
+            }
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("GET /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
+});
+
+// Update agenda
+app.post('/agenda/:rut_paciente&:agenda_id', function(req, res){
+    "use strict";
+    var rut_paciente = req.params.rut_paciente;
+    var agenda_id = req.params.agenda_id;
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+        connection.execute(`update agenda set disponibilidad_agenda = 'N', rut_paciente = ${rut_paciente} where id_agenda = ${agenda_id}`, {}, {
             outFormat: oracledb.OBJECT // Return the result as Object
         }, function (err, result) {
             if (err) {
