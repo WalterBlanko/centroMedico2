@@ -14,8 +14,10 @@ import { SecretaryComponent } from './pages/personal/secretary/secretary.compone
 import { PatientComponent } from './pages/personal/patient/patient.component';
 import { SignupComponent } from './pages/signup/signup.component';
 import { LoginComponent } from './pages/login/login.component';
-import { TestingComponent } from './pages/testing/testing.component';
 import { RequestComponent } from './pages/request/request.component';
+import { ReviewRequestsComponent } from './pages/personal/secretary/review-requests/review-requests.component';
+import { ModifyPricesComponent } from './pages/personal/secretary/modify-prices/modify-prices.component';
+import { ReviewRequestIdComponent } from './pages/personal/secretary/review-request-id/review-request-id.component';
 
 const routes: Routes = [
   {
@@ -50,7 +52,7 @@ const routes: Routes = [
     component: LocationsComponent
   },
   {
-    path: '',
+    path: 'appointment',
     component: AppointmentComponent
   },
   {
@@ -72,6 +74,18 @@ const routes: Routes = [
   {
     path: 'msg-send',
     component: MsgSendComponent
+  },
+  {
+    path: '',
+    component: ReviewRequestsComponent
+  },
+  {
+    path: 'modify-prices',
+    component: ModifyPricesComponent
+  },
+  {
+    path: 'review-request/:id',
+    component: ReviewRequestIdComponent
   },
   {
     path: '**',

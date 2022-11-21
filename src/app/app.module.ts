@@ -21,6 +21,9 @@ import { LoginComponent } from './pages/login/login.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TestingComponent } from './pages/testing/testing.component';
 import { RequestComponent } from './pages/request/request.component';
+import { ReviewRequestsComponent } from './pages/personal/secretary/review-requests/review-requests.component';
+import { ModifyPricesComponent } from './pages/personal/secretary/modify-prices/modify-prices.component';
+import { ReviewRequestIdComponent } from './pages/personal/secretary/review-request-id/review-request-id.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +42,10 @@ import { RequestComponent } from './pages/request/request.component';
     SignupComponent,
     LoginComponent,
     TestingComponent,
-    RequestComponent
+    RequestComponent,
+    ReviewRequestsComponent,
+    ModifyPricesComponent,
+    ReviewRequestIdComponent
   ],
   imports: [
     BrowserModule,

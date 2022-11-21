@@ -126,6 +126,7 @@ CREATE TABLE solicitud (
     tipo_solicitud VARCHAR2(50) NOT NULL,
     mensaje_solicitud VARCHAR2(255) NOT NULL,
     disponible_solicitud char not null,
+    fecha_solicitud varchar2(10) not null,
     id_personal NUMBER NULL,
     rut_paciente NUMBER NULL,
     CONSTRAINT fk_solicitud_personal FOREIGN KEY (id_personal) REFERENCES personal(id_personal),

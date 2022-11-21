@@ -1,0 +1,22 @@
+<div>
+    <div>
+        <h2>Solicitudes pendientes</h2>
+    </div>
+    <div>
+        <table *ngFor="let i of requests">
+            <tr>
+                <th>Fecha de solicitud</th>
+                <th>Tipo de solicitud</th>
+                <th>Disponibilidad</th>
+                <th>Rut del paciente</th>
+            </tr>
+            <tr>
+                <td>{{ i.FECHA_SOLICITUD }}</td>
+                <td>{{ i.TIPO_SOLICITUD }}</td>
+                <td>{{ i.DISPONIBLE_SOLICITUD }}</td>
+                <td>{{ i.RUT_PACIENTE }}</td>
+                <td><button (click)="getIdRequest($event)" value="{{ i.ID_SOLICITUD }}">Abrir solicitud</button></td>
+            </tr>
+        </table>
+    </div>
+</div>

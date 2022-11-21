@@ -542,6 +542,99 @@ app.get('/speciality/', function(req, res){
     });
 });
 
+// Get requests
+app.get('/requests/', function(req, res){
+    "use strict";
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+        connection.execute('select * from solicitud', {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(result.rows));
+
+            }
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("GET /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
+});
+
+// Get request by ID
+app.get('/requests/:request_id', function(req, res){
+    "use strict";
+    var request_id = req.params.request_id;
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+        connection.execute(`select * from solicitud where id_solicitud = ${request_id}`, {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(result.rows));
+
+            }
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("GET /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
+});
+
 // Get doctor by sucursal id
 app.get('/doctorbysucursal/:sucursal_id', function(req, res){
     "use strict";
@@ -653,60 +746,12 @@ app.get('/doctoragenda/:doctor_id', function(req, res){
 });
 
 // Update agenda
-app.post('/agenda/:rut_paciente&:agenda_id', function(req, res){
-    "use strict";
-    var rut_paciente = req.params.rut_paciente;
-    var agenda_id = req.params.agenda_id;
-
-    oracledb.getConnection(connAttrs, function (err, connection) {
-        if (err) {
-            // Error connecting to DB
-            res.set('Content-Type', 'application/json');
-            res.status(500).send(JSON.stringify({
-                status: 500,
-                message: "Error connecting to DB",
-                detailed_message: err.message
-            }));
-            return;
-        }
-        connection.execute(`update agenda set disponibilidad_agenda = 'N', rut_paciente = ${rut_paciente} where id_agenda = ${agenda_id}`, {}, {
-            outFormat: oracledb.OBJECT // Return the result as Object
-        }, function (err, result) {
-            if (err) {
-                res.set('Content-Type', 'application/json');
-                res.status(500).send(JSON.stringify({
-                    status: 500,
-                    message: "Error getting the dba_tablespaces",
-                    detailed_message: err.message
-                }));
-            } else {
-                res.header('Access-Control-Allow-Origin', '*');
-                res.header('Access-Control-Allow-Headers', 'Content-Type');
-                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
-                res.contentType('application/json').status(200);
-                res.send(JSON.stringify(result.rows));
-
-            }
-            // Release the connection
-            connection.release(
-                function (err) {
-                    if (err) {
-                        console.error(err.message);
-                    } else {
-                        console.log("GET /sendTablespace : Connection released");
-                    }
-                });
-        });
-    });
-});
-
-// Post request
-app.post('/addrequest/', function (req, res, next) {
-    var tipo_solicitud = req.body.tipo_solicitud;
-    var mensaje_solicitud = req.body.mensaje_solicitud;
+app.post('/updateagenda/', function (req, res, next) {
     var rut_paciente = req.body.rut_paciente;
+    var id_agenda = req.body.id_agenda;
+    var id_solicitud = req.body.id_solicitud;
 
-    console.log(tipo_solicitud, mensaje_solicitud, rut_paciente);
+    console.log(rut_paciente, id_agenda, id_solicitud);
 
     oracledb.getConnection(connAttrs, function (err, connection) {
         if (err) {
@@ -720,7 +765,7 @@ app.post('/addrequest/', function (req, res, next) {
             return;
         }
 
-        connection.execute("INSERT INTO solicitud VALUES (sq_soli.nextval, '" + tipo_solicitud + "', '" + mensaje_solicitud + "', 'Y', null, '" + rut_paciente + "')", {}, {
+        connection.execute(`update agenda set disponibilidad_agenda = 'N', rut_paciente = ${rut_paciente}, id_solicitud = ${id_solicitud} where id_agenda = ${id_agenda}`, {}, {
             outFormat: oracledb.OBJECT // Return the result as Object
         }, function (err, result) {
             if (err) {
@@ -750,7 +795,56 @@ app.post('/addrequest/', function (req, res, next) {
                 });
         });
     });
+});
 
+// Post request
+app.post('/addrequest/', function (req, res, next) {
+    var tipo_solicitud = req.body.tipo_solicitud;
+    var mensaje_solicitud = req.body.mensaje_solicitud;
+    var rut_paciente = req.body.rut_paciente;
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+
+        connection.execute("INSERT INTO solicitud VALUES (sq_soli.nextval, '" + tipo_solicitud + "', '" + mensaje_solicitud + "', 'Y', to_char(sysdate, 'dd-mm-yyyy') ,null, '" + rut_paciente + "')", {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(err.message));
+            } else {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify("Ingreso exitoso"));
+            }
+
+            connection.commit();
+
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("POST /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
 });
 
 app.listen(3000, function () {

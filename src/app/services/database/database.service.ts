@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { catchError, Observable, retry, throwError } from 'rxjs';
+import { catchError, Observable, retry, throwError, BehaviorSubject } from 'rxjs';
+
 import { Medico } from 'src/app/models/medico';
 import { Pacient } from 'src/app/models/pacient';
 import { Request } from 'src/app/models/request';
@@ -10,6 +11,7 @@ import { Confirm } from 'src/app/models/confirm';
   providedIn: 'root'
 })
 export class DatabaseService {
+
   // URL
   baseurl = 'http://localhost:3000';
 
@@ -67,9 +69,31 @@ export class DatabaseService {
   }
 
   // Update agenda
-  confirmAgenda(user: Confirm) {
-    console.log(user);
-    return this.http.post(this.baseurl + '/agenda/', user).pipe(retry(3), catchError(this.errorHandl));
+  // confirmAgenda(rut_paciente: any, id_agenda: any, request_id: any) {
+  //   return this.http.post(this.baseurl + `/updateagenda/${rut_paciente}&${id_agenda}&${request_id}`, {}).pipe(retry(3), catchError(this.errorHandl));
+  // }
+
+  confirmAgenda(conf: Confirm): Observable<Confirm> {
+    console.log(conf);
+    return this.http.post<Confirm>(this.baseurl + '/updateagenda/', conf).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Get requests
+  getRequests() {
+    return this.http.get<any>(this.baseurl + '/requests/').pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Get request by ID
+  getRequestById(request_id: any) {
+    return this.http.get<any>(this.baseurl + '/requests/' + request_id).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Get request id and call it into another component
+  private id_request = new BehaviorSubject<any>({});
+  selectedRequest = this.id_request.asObservable();
+
+  setRequest(id_request: any) {
+    this.id_request.next(id_request);
   }
 
   // Error handling
