@@ -21,7 +21,6 @@ var connAttrs = {
     "connectString": "(DESCRIPTION =(LOAD_BALANCE = ON)(FAILOVER = ON)(ADDRESS =(PROTOCOL = TCP)(HOST = localhost)(PORT = 1521))(ADDRESS = (PROTOCOL = TCP)(HOST = localhost)(PORT=1521))(CONNECT_DATA=(SERVICE_NAME=pdb)(FAILOVER_MODE=(TYPE=SELECT)(METHOD = BASIC))))"
 }
 
-
 // Get pacientes
 app.get('/pacientes', function (req, res) {
     "use strict";
@@ -746,7 +745,7 @@ app.get('/doctoragenda/:doctor_id', function(req, res){
 });
 
 // Update agenda
-app.post('/updateagenda/', function (req, res, next) {
+app.post('/updateagenda', function (req, res, next) {
     var rut_paciente = req.body.rut_paciente;
     var id_agenda = req.body.id_agenda;
     var id_solicitud = req.body.id_solicitud;

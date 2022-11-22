@@ -29,7 +29,7 @@ const routes: Routes = [
     component: RequestComponent
   },
   {
-    path: 'home',
+    path: '',
     component: HomeComponent
   },
   {
@@ -76,7 +76,7 @@ const routes: Routes = [
     component: MsgSendComponent
   },
   {
-    path: '',
+    path: 'review-request',
     component: ReviewRequestsComponent
   },
   {

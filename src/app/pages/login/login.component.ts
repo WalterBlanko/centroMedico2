@@ -52,17 +52,13 @@ export class LoginComponent implements OnInit {
     });
   }
 
+  onSelectedEmail(email: any) {
+    this.db.setEmail(email);
+  }
+
   navegation(email: string) {
-    var loginData = {
-      "email": email
-    }
+    this.onSelectedEmail(email);
 
-    this.navegationsextras = {
-      state: {
-        data: loginData
-      }
-    }
-
-    this.router.navigate(['/'], this.navegationsextras);
+    this.router.navigate(['/']);
   }
 }

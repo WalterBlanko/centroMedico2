@@ -28,7 +28,7 @@ export class RequestComponent implements OnInit {
 
   addRequest() {
     this.request = this.requestForm.value;
-    console.log(this.request);
-    // this.db.addRequest(this.request).subscribe();    
+    
+    this.db.addRequest(this.request).subscribe();    
   }
 }

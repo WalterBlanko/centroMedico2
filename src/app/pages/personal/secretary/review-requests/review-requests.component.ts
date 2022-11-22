@@ -36,16 +36,6 @@ export class ReviewRequestsComponent implements OnInit {
   getIdRequest(event: Event) {
     let req_selected = (event.target as HTMLInputElement).value;
 
-    var idData = {
-      "id": Number(req_selected)
-    }
-
-    this.navegationextras = {
-      state: {
-        data: idData
-      }
-    }
-
     this.onSelectedRequest(req_selected);
 
     this.router.navigate([`/review-request/${Number(req_selected)}`]);

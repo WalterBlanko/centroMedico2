@@ -18,6 +18,7 @@ export class DatabaseService {
   constructor(private http: HttpClient) {
   }
 
+  // ---------------------------------- GET SECTION ----------------------------------
   // Get pacientes
   getPacientes(): Observable<Pacient> {
     return this.http.get<Pacient>(this.baseurl + '/pacientes/').pipe(retry(3), catchError(this.errorHandl));
@@ -48,34 +49,9 @@ export class DatabaseService {
     return this.http.get<any>(this.baseurl + '/speciality/').pipe(retry(3), catchError(this.errorHandl));
   }
 
-  // Add pacient
-  addPacient(user: Pacient): Observable<Pacient> {
-    return this.http.post<Pacient>(this.baseurl + '/addpaciente/', user).pipe(retry(3), catchError(this.errorHandl));
-  }
-
   // Login
   login(correo_paciente: string) {
     return this.http.get<any>(this.baseurl + '/searchuser/' + correo_paciente).pipe(retry(3), catchError(this.errorHandl));
-  }
-
-  // Forget
-  forget(correo_paciente: string, password_paciente: string) {
-    return this.http.post(this.baseurl + '/changedata/' + correo_paciente + '&' + password_paciente, {}).pipe(retry(3), catchError(this.errorHandl));
-  }
-
-  // Post request
-  addRequest(request: Request) {
-    return this.http.post(this.baseurl + '/addrequest/', request).pipe(retry(3), catchError(this.errorHandl));
-  }
-
-  // Update agenda
-  // confirmAgenda(rut_paciente: any, id_agenda: any, request_id: any) {
-  //   return this.http.post(this.baseurl + `/updateagenda/${rut_paciente}&${id_agenda}&${request_id}`, {}).pipe(retry(3), catchError(this.errorHandl));
-  // }
-
-  confirmAgenda(conf: Confirm): Observable<Confirm> {
-    console.log(conf);
-    return this.http.post<Confirm>(this.baseurl + '/updateagenda/', conf).pipe(retry(3), catchError(this.errorHandl));
   }
 
   // Get requests
@@ -94,6 +70,48 @@ export class DatabaseService {
 
   setRequest(id_request: any) {
     this.id_request.next(id_request);
+  }
+
+  // Get rut when the pacient log on the system
+  private email_pacient = new BehaviorSubject<any>({});
+  selectedEmail = this.email_pacient.asObservable();
+
+  setEmail(email_pacient: any) {
+    let validation = this.email_pacient.next(email_pacient);
+
+    if( validation == null ) {
+       this.setLogin(false);
+    } else {
+      this.setLogin(true);
+    }
+  }
+
+  // When the login is valid, this wea its true
+  private validateLogin = new BehaviorSubject<boolean>(false);
+  authLogin = this.validateLogin.asObservable();
+
+  setLogin(validateLogin: boolean) {
+    this.validateLogin.next(validateLogin);
+  }
+  // ---------------------------------- POST SECTION ----------------------------------
+  // Add pacient
+  addPacient(user: Pacient): Observable<Pacient> {
+    return this.http.post<Pacient>(this.baseurl + '/addpaciente/', user).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Confirm request agenda
+  confirmAgenda(conf: Confirm): Observable<Confirm> {
+    return this.http.post<Confirm>(this.baseurl + '/updateagenda/', conf).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Forget
+  forget(correo_paciente: string, password_paciente: string) {
+    return this.http.post(this.baseurl + '/changedata/' + correo_paciente + '&' + password_paciente, {}).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Post request
+  addRequest(request: Request) {
+    return this.http.post(this.baseurl + '/addrequest/', request).pipe(retry(3), catchError(this.errorHandl));
   }
 
   // Error handling

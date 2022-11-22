@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { DatabaseService } from 'src/app/services/database/database.service';
-import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-home',
@@ -8,21 +7,19 @@ import { FormGroup, FormControl, FormBuilder, Validators } from '@angular/forms'
   styleUrls: ['./home.component.scss']
 })
 export class HomeComponent implements OnInit {
-  public identified: boolean
+  email: any;
 
-  constructor( public service: DatabaseService ) {
-    this.identified = false;
+  constructor( public db: DatabaseService ) {
+    this.loginTest();
   }
 
   ngOnInit(): void {
   }
 
-  setLogin() {
-    this.identified = true;
-  }
-
-  setLogout() {
-    this.identified = false;
+  loginTest() {
+    this.db.selectedEmail.subscribe((value: any) => {
+      this.email = value;
+    })
   }
 
 }

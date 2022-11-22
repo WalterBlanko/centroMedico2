@@ -1,44 +1,50 @@
-<body>
-    <div *ngIf="identified; then Identified else noIdentified"></div>
-    <ng-template #Identified>
-        <button (click)="setLogout()">Logout</button>
-        <div class="options__center">
-            <div class="options__grid">
-                <div class="options__1">
-                    <div class="options__center">
-                        <div>
-                            <h2 class="options__type">Nuestras sucursales</h2>
-                            <div class="options__space">
-                                <a [routerLink]="['/']"><div class="options__icon"></div></a>
-                            </div>
+<!-- <div *ngIf="identified; then Identified else noIdentified"></div>
+<ng-template #Identified>
+    <button (click)="setLogout()">Logout</button>
+    <div class="options__center">
+        <div class="options__grid">
+            <div class="options__1">
+                <div class="options__center">
+                    <div>
+                        <h2 class="options__type">Nuestras sucursales</h2>
+                        <div class="options__space">
+                            <a [routerLink]="['/']">
+                                <div class="options__icon"></div>
+                            </a>
                         </div>
                     </div>
                 </div>
-                <div class="options__2">
-                    <div class="options__center">
-                        <div>
-                            <div class="options__space">
-                                <h2 class="options__type">Tomar Hora</h2>
-                                <a [routerLink]="['/']"><div class="options__icon"></div></a>
-                            </div>
+            </div>
+            <div class="options__2">
+                <div class="options__center">
+                    <div>
+                        <div class="options__space">
+                            <h2 class="options__type">Tomar Hora</h2>
+                            <a [routerLink]="['/']">
+                                <div class="options__icon"></div>
+                            </a>
                         </div>
                     </div>
                 </div>
-                <div class="options__3">
-                    <div class="options__center">
-                        <div>
-                            <div class="options__space">
-                                <h2 class="options__type">Solicitar hora</h2>
-                                <a [routerLink]="['/']"><div class="options__icon"></div></a>
-                            </div>
+            </div>
+            <div class="options__3">
+                <div class="options__center">
+                    <div>
+                        <div class="options__space">
+                            <h2 class="options__type">Solicitar hora</h2>
+                            <a [routerLink]="['/']">
+                                <div class="options__icon"></div>
+                            </a>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-    </ng-template>
+    </div>
+</ng-template>
 
-    <ng-template #noIdentified>
-        <button (click)="setLogin()">Login</button>
-    </ng-template>
-</body>
+<ng-template #noIdentified>
+    <button (click)="setLogin()">Login</button>
+</ng-template> -->
+
+<p>{{ email }}</p>

@@ -107,8 +107,6 @@ export class ReviewRequestIdComponent implements OnInit {
       id_solicitud: this.req_id
     }
     
-    console.log(this.conf);
-
-    this.db.confirmAgenda(this.conf);
+    this.db.confirmAgenda(this.conf).subscribe();
   }
 }
