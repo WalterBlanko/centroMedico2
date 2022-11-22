@@ -6,6 +6,9 @@ import { Medico } from 'src/app/models/medico';
 import { Pacient } from 'src/app/models/pacient';
 import { Request } from 'src/app/models/request';
 import { Confirm } from 'src/app/models/confirm';
+import { Condition } from 'src/app/models/condition';
+import { Payment } from 'src/app/models/payment';
+import { Attention } from 'src/app/models/attention';
 
 @Injectable({
   providedIn: 'root'
@@ -64,6 +67,26 @@ export class DatabaseService {
     return this.http.get<any>(this.baseurl + '/requests/' + request_id).pipe(retry(3), catchError(this.errorHandl));
   }
 
+  // Get agenda by pacient RUT
+  getAgendaByRut(pacient_rut: any) {
+    return this.http.get(this.baseurl + `/pacient-agenda/${pacient_rut}`).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Get request by pacient RUT
+  getRequestsByRut(pacient_rut: any) {
+    return this.http.get(this.baseurl + `/get-pacient-requests/${pacient_rut}`).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Get payment ID
+  getPaymentId(agenda_id: any) {
+    return this.http.get(this.baseurl + `/payment-id/${agenda_id}`).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  getAttention(medic_id: any) {
+    return this.http.get(this.baseurl + `/attention/${medic_id}`).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // --------------------------------------- Funtions ---------------------------------------------
   // Get request id and call it into another component
   private id_request = new BehaviorSubject<any>({});
   selectedRequest = this.id_request.asObservable();
@@ -77,12 +100,12 @@ export class DatabaseService {
   selectedEmail = this.email_pacient.asObservable();
 
   setEmail(email_pacient: any) {
-    let validation = this.email_pacient.next(email_pacient);
-
-    if( validation == null ) {
-       this.setLogin(false);
-    } else {
+    if(email_pacient != "") {
+      this.email_pacient.next(email_pacient);
       this.setLogin(true);
+    } else {
+      this.email_pacient.next(null);
+      this.setLogin(false);
     }
   }
 
@@ -93,6 +116,15 @@ export class DatabaseService {
   setLogin(validateLogin: boolean) {
     this.validateLogin.next(validateLogin);
   }
+
+  // Get ID from the secretary or doctor when they login in the system
+  private personal_id = new BehaviorSubject<any>({});
+  authId = this.personal_id.asObservable();
+
+  setId(personal_id: any) {
+    this.personal_id.next(personal_id);
+  }
+
   // ---------------------------------- POST SECTION ----------------------------------
   // Add pacient
   addPacient(user: Pacient): Observable<Pacient> {
@@ -109,9 +141,29 @@ export class DatabaseService {
     return this.http.post(this.baseurl + '/changedata/' + correo_paciente + '&' + password_paciente, {}).pipe(retry(3), catchError(this.errorHandl));
   }
 
+  // condition request
+  conditionRequest(cond: Condition) {
+    return this.http.post<Condition>(this.baseurl + '/conditionagenda/', cond).pipe(retry(3), catchError(this.errorHandl));
+  }
+
   // Post request
-  addRequest(request: Request) {
-    return this.http.post(this.baseurl + '/addrequest/', request).pipe(retry(3), catchError(this.errorHandl));
+  addRequest(pacient_rut:any, request: Request) {
+    return this.http.post(this.baseurl + `/addrequest/${pacient_rut}`, request).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Pay attention
+  payment(payment: Payment) {
+    return this.http.post<Payment>(this.baseurl + '/payment/', payment).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Add attention
+  addAttention(attention: Attention) {
+    return this.http.post<Attention>(this.baseurl + '/add-attention/', attention).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Update attention status
+  updateAttention(attention_id: any) {
+    return this.http.post(this.baseurl + `/update-attention/${attention_id}`, {}).pipe(retry(3), catchError(this.errorHandl));
   }
 
   // Error handling

@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { DatabaseService } from 'src/app/services/database/database.service';
 
 @Component({
   selector: 'app-home',
@@ -8,18 +7,11 @@ import { DatabaseService } from 'src/app/services/database/database.service';
 })
 export class HomeComponent implements OnInit {
   email: any;
+  login: any;
 
-  constructor( public db: DatabaseService ) {
-    this.loginTest();
+  constructor() {
   }
 
   ngOnInit(): void {
   }
-
-  loginTest() {
-    this.db.selectedEmail.subscribe((value: any) => {
-      this.email = value;
-    })
-  }
-
 }

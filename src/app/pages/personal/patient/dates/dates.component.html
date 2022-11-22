@@ -1,0 +1,23 @@
+<div>
+    <div>
+        <h2>Mis reservas</h2>
+    </div>
+    <table>
+        <tr>
+            <th>Fecha</th>
+            <th>Hora</th>
+            <th>Especialidad</th>
+            <th>Doctor</th>
+            <th>Sucursal</th>
+        </tr>
+        <tr *ngFor="let i of agenda">
+            <td>{{ i.FECHA_AGENDA }}</td>
+            <td>{{ i.HORA_AGENDA }}</td>
+            <td>{{ i.MEDICO }}</td>
+            <td>{{ i.NOMBRE_ESPECIALIDAD }}</td>
+            <td>{{ i.NOMBRE_SUCURSAL }}</td>
+            <td><button (click)="getValue($event)" value="{{ i.VALOR_ESPECIALIDAD }}, {{ i.ID_AGENDA }}, {{ i.ID_MEDICO }}">Pagar</button>
+            </td>
+        </tr>
+    </table>
+</div>

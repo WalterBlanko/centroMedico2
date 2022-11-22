@@ -18,6 +18,10 @@ import { RequestComponent } from './pages/request/request.component';
 import { ReviewRequestsComponent } from './pages/personal/secretary/review-requests/review-requests.component';
 import { ModifyPricesComponent } from './pages/personal/secretary/modify-prices/modify-prices.component';
 import { ReviewRequestIdComponent } from './pages/personal/secretary/review-request-id/review-request-id.component';
+import { DatesComponent } from './pages/personal/patient/dates/dates.component';
+import { RequestsComponent } from './pages/personal/patient/requests/requests.component';
+import { ConsultComponent } from './pages/personal/doctor/consult/consult.component';
+import { CommissionComponent } from './pages/personal/doctor/commission/commission.component';
 
 const routes: Routes = [
   {
@@ -29,7 +33,7 @@ const routes: Routes = [
     component: RequestComponent
   },
   {
-    path: '',
+    path: 'home',
     component: HomeComponent
   },
   {
@@ -76,7 +80,7 @@ const routes: Routes = [
     component: MsgSendComponent
   },
   {
-    path: 'review-request',
+    path: 'review',
     component: ReviewRequestsComponent
   },
   {
@@ -86,6 +90,18 @@ const routes: Routes = [
   {
     path: 'review-request/:id',
     component: ReviewRequestIdComponent
+  },
+  {
+    path: 'my-dates',
+    component: DatesComponent
+  },
+  {
+    path: 'my-requests',
+    component: RequestsComponent
+  },
+  {
+    path: '',
+    component: ConsultComponent
   },
   {
     path: '**',

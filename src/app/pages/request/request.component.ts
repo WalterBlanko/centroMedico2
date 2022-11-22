@@ -20,7 +20,6 @@ export class RequestComponent implements OnInit {
 
   ngOnInit(): void {
     this.requestForm = new FormGroup({
-      rut_paciente: new FormControl(Number('21729527'), Validators.required),
       tipo_solicitud: new FormControl('Urgente', Validators.required),
       mensaje_solicitud: new FormControl('Testing', Validators.required)
     });
@@ -28,7 +27,10 @@ export class RequestComponent implements OnInit {
 
   addRequest() {
     this.request = this.requestForm.value;
+
+    this.db.authId.subscribe((value: any) => {
+      this.db.addRequest(value, this.request).subscribe();    
+    })
     
-    this.db.addRequest(this.request).subscribe();    
   }
 }

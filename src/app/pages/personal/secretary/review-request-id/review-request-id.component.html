@@ -7,27 +7,31 @@
         <p>{{ i.MENSAJE_SOLICITUD }}</p>
     </div>
     <div>
-        <div>
+        <!-- DIV de agenda -->
+        <div *ngIf="approve == true">
             <div>
                 <form>
                     <label>Seleccione especialidad:</label>
                     <div>
-                         <select (input)="getSpeciality($event)">
+                        <select (input)="getSpeciality($event)">
                             <option value="" selected disabled hidden>Seleccionar</option>
-                            <option *ngFor="let i of speciality" value="'{{ i.ID_ESPECIALIDAD }}'">{{ i.NOMBRE_ESPECIALIDAD }}</option>
-                         </select>
-        
-                         <select (input)="getCenter($event)">
+                            <option *ngFor="let i of speciality" value="'{{ i.ID_ESPECIALIDAD }}'">{{
+                                i.NOMBRE_ESPECIALIDAD }}</option>
+                        </select>
+
+                        <select (input)="getCenter($event)">
                             <option value="" selected disabled hidden>Seleccionar</option>
-                            <option *ngFor="let i of sucursales" value="'{{ i.ID_SUCURSAL }}'">{{ i.NOMBRE_SUCURSAL }}</option>
-                         </select>
-        
-                         <select (input)="getDoctor($event)">
+                            <option *ngFor="let i of sucursales" value="'{{ i.ID_SUCURSAL }}'">{{ i.NOMBRE_SUCURSAL }}
+                            </option>
+                        </select>
+
+                        <select (input)="getDoctor($event)">
                             <option value="" selected disabled hidden>Seleccionar</option>
-                            <option *ngFor="let i of medicos" value="'{{ i.ID_MEDICO }}'">{{ i.PNOMBRE_MEDICO }} {{ i.APATERNO_MEDICO }}</option>
-                         </select>
-        
-                         <table>
+                            <option *ngFor="let i of medicos" value="'{{ i.ID_MEDICO }}'">{{ i.PNOMBRE_MEDICO }} {{
+                                i.APATERNO_MEDICO }}</option>
+                        </select>
+
+                        <table>
                             <tr>
                                 <th>Fecha</th>
                                 <th>Hora</th>
@@ -35,18 +39,20 @@
                             <tr *ngFor="let i of agenda">
                                 <td>{{ i.FECHA_AGENDA }}</td>
                                 <td>{{ i.HORA_AGENDA }}</td>
-                                <td><button (click)="getIdAgenda($event)" value="{{ i.ID_AGENDA }}">Elegir hora</button></td>
+                                <td><button (click)="getIdAgenda($event)" value="{{ i.ID_AGENDA }}">Elegir hora</button>
+                                </td>
                             </tr>
-                         </table>
-        
-                         <button (click)="confirmHour()">Confirmar hora</button>
+                        </table>
+
+                        <button (click)="confirmHour()">Confirmar hora</button>
                     </div>
                 </form>
             </div>
         </div>
+        <!-- Fin del div de Agenda -->
         <div>
-            <button>Agendar</button>
-            <button>Rechazar</button>
+            <button (click)="approveAgenda()">Agendar</button>
+            <button (click)="reject()">Rechazar</button>
         </div>
     </div>
 </div>

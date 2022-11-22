@@ -1,0 +1,16 @@
+<div>
+    <h2>Pacientes en espera</h2>
+</div>
+<div>
+    <tr>
+        <th>id de atencion</th>
+        <th>estado de paciente</th>
+        <th>rut de paciente</th>
+    </tr>
+    <tr *ngFor="let i of pacient">
+        <td>{{ i.ID_ATENCION }}</td>
+        <td>{{ i.ATENCION_PACIENTE }}</td>
+        <td>{{ i.RUT_PACIENTE }}</td>
+        <td><button (click)="getId($event)" value="{{ i.ID_ATENCION }}">Marcar paciente atendido</button></td>
+    </tr>
+</div>

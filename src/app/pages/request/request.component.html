@@ -1,8 +1,6 @@
 <body>
     <div>
         <form [formGroup]="requestForm" (ngSubmit)="addRequest()">
-            <input type="text" formControlName="rut_paciente" placeholder="Ingrese su rut">
-            <br>
             <label>Escoja tipo de solicitud:</label>
             <div>
                  <select name="requet" id="request" formControlName="tipo_solicitud">

@@ -1,0 +1,21 @@
+<div>
+    <h2>Mis solicitudes</h2>
+</div>
+<div>
+    <table>
+        <tr>
+            <th>Id de solicitud</th>
+            <th>Fecha de solicitud</th>
+            <th>Tipo de solicitud</th>
+            <th>Estado de solicitud</th>
+            <th>Fecha de respuesta</th>
+        </tr>
+        <tr *ngFor="let i of req">
+            <td>{{ i.ID_SOLICITUD}}</td>
+            <td>{{ i.FECHA_SOLICITUD}}</td>
+            <td>{{ i.TIPO_SOLICITUD}}</td>
+            <td>{{ i.ESTADO_SOLICITUD}}</td>
+            <td>{{ i.FECHA_CAMBIO}}</td>
+        </tr>
+    </table>
+</div>

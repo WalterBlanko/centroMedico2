@@ -24,8 +24,8 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
-      correo_paciente: new FormControl('correo@correo.com', Validators.required),
-      password_paciente: new FormControl('123456789', Validators.required)
+      correo_paciente: new FormControl('ma.galvezc@centrogalenos.cl', Validators.required),
+      password_paciente: new FormControl('MACLGACA22112022', Validators.required)
     });
   }
 
@@ -38,12 +38,17 @@ export class LoginComponent implements OnInit {
         const data = element[i];
 
         if(email == data.CORREO_PACIENTE && pass == data.PASSWORD_PACIENTE) {
-          this.navegation(email);
+          this.navegation(email, data.RUT_PACIENTE);
           break;
         }
 
         if(email == data.CORREO_MEDICO && pass == data.PASSWORD_MEDICO) {
-          this.navegation(email);
+          this.navegation(email, data.ID_MEDICO);
+          break;
+        }
+
+        if(email == data.CORREO_PERSONAL && pass == data.PASSWORD_PERSONAL) {
+          this.navegation(email, data.ID_PERSONAL);
           break;
         }
 
@@ -56,8 +61,13 @@ export class LoginComponent implements OnInit {
     this.db.setEmail(email);
   }
 
-  navegation(email: string) {
+  onSelectedId(id: any) {
+    this.db.setId(id);
+  }
+
+  navegation(email: string, id: any) {
     this.onSelectedEmail(email);
+    this.onSelectedId(id);
 
     this.router.navigate(['/']);
   }

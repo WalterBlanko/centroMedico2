@@ -119,14 +119,14 @@ CREATE TABLE paciente (
     password_paciente VARCHAR2(50) NOT NULL
 );
 
-
-
 CREATE TABLE solicitud (
     id_solicitud NUMBER NOT NULL CONSTRAINT pk_solicitud PRIMARY KEY,
     tipo_solicitud VARCHAR2(50) NOT NULL,
     mensaje_solicitud VARCHAR2(255) NOT NULL,
-    disponible_solicitud char not null,
+    disponibilidad_solicitud char not null,
+    estado_solicitud varchar2(20) null,
     fecha_solicitud varchar2(10) not null,
+    fecha_cambio varchar2(10) null,
     id_personal NUMBER NULL,
     rut_paciente NUMBER NULL,
     CONSTRAINT fk_solicitud_personal FOREIGN KEY (id_personal) REFERENCES personal(id_personal),
@@ -152,13 +152,14 @@ CREATE TABLE pago (
     id_pago NUMBER NOT NULL CONSTRAINT pk_pago PRIMARY KEY,
     valor_pago NUMBER NOT NULL,
     impuesto_pago NUMBER NOT NULL,
+    estado_pago varchar2(20) null,
     id_agenda number not null,
     constraint fk_pago_agenda foreign key (id_agenda) references agenda(id_agenda)
 );
 
 CREATE TABLE atencion (
     id_atencion NUMBER NOT NULL CONSTRAINT pk_atencion PRIMARY KEY,
-    tipo_atencion VARCHAR2(50) NOT NULL,
+    atencion_paciente varchar2(25) NOT NULL,
     id_pago number not null,
     id_medico number not null,
     constraint fk_atencion_pago foreign key (id_pago) references pago(id_pago),
@@ -256,6 +257,9 @@ INSERT INTO tipo_pago VALUES(sq_tipopago.NEXTVAL, 'Credito');
 INSERT INTO tipo_pago VALUES(sq_tipopago.NEXTVAL, 'Debito');
 INSERT INTO tipo_pago VALUES(sq_tipopago.NEXTVAL, 'Cheque');
 
+INSERT INTO personal VALUES (sq_per.NEXTVAL, 'APONTE', 'BRAVO', 'VICTOR', 'MAURICIO', lower(substr('VICTOR', 1, 2)||'.'||'APONTE'||'@'||'personal.centrogalenos.cl'), 'zeronotsukaima1', 2, 50);
+
+INSERT INTO especialidad VALUES (sq_esp.NEXTVAL, 'Medicina General', 15000);
 INSERT INTO especialidad VALUES (sq_esp.NEXTVAL, 'Alergolog?a', 59993);
 INSERT INTO especialidad VALUES (sq_esp.NEXTVAL, 'Anestesiolog?a', 23628);
 INSERT INTO especialidad VALUES (sq_esp.NEXTVAL, 'Angiolog?a', 36017);
@@ -315,135 +319,146 @@ INSERT INTO medico VALUES (sq_med.NEXTVAL, 12642309,'K','NAVARRO','SANTIBA?EZ','
 INSERT INTO medico VALUES (sq_med.NEXTVAL, 18560875,'5','BARRERA','ONETO','MARIA','CARRERA', lower(substr('BARRERA', 1, 2)||'.'||'MARIA'||substr('CARRERA', 1,1)||'@'||'centrogalenos.cl'), substr('BARRERA', 1,2)||substr('ONETO', 1,2)||substr('MARIA', 1,2)||substr('CARRERA', 1,2)||to_char(sysdate, 'ddmmyyyy'), 207, 3, 50); -- 24
 INSERT INTO medico VALUES (sq_med.NEXTVAL, 17963421,'K','RIVAS','MORENO','JUAN','SANTA', lower(substr('RIVAS', 1, 2)||'.'||'JUAN'||substr('SANTA', 1,1)||'@'||'centrogalenos.cl'), substr('RIVAS', 1,2)||substr('MORENO', 1,2)||substr('JUAN', 1,2)||substr('SANTA', 1,2)||to_char(sysdate, 'ddmmyyyy'), 209, 3, 50); -- 25
 
-INSERT INTO paciente VALUES (10639521,'0', 'M', 'UVAL','RIQUELME','MIGUEL','SAN PABLO', '982718405', '20/07/1972','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (13074837,'1', 'M', 'AMENGUAL','SALDIAS','CESAR','CODORNICES', '966987936', '13/03/1961','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12251882,'2', 'M', 'MORICE','DONOSO','CLAUDIO','CHACALLUTA', '972615780', '13/03/1961','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (10238830,'3', 'M', 'SOTO','ARMAZAN','JUAN','MORELOS', '918169731', '17/05/1974','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12777063,'4', 'M', 'VILLENA','CAVERO','PABLO','NAVIDAD', '937531297', '12/10/1963','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12467572,'5', 'M', 'RIQUELME','BRIGNARDELLO','MIGUEL','AMERICO', '938516563', '26/07/1985','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12866487,'6', 'F', 'STOLLER','VARGAS','LORENA','BABURIZZA', '993166305', '20/09/1992','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (13463138,'7', 'M', 'BRAVO','HENRIQUEZ','PABLO','FLACO', '986406283', '05/12/1992','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (11657132,'8', 'M', 'ACU?A','BARRERA','RONNY','ASTRONOMICO', '983849127', '20/05/1990','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12487147,'9', 'M', 'MARIN','ARAVENA','JUAN','PALMAS', '968799322', '25/02/1981','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12817700,'K', 'F', 'VARGAS','GARAY','CLAUDIA','BELEN', '967329625', '25/05/1986','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (9499044,'5', 'M', 'ROJAS','ACHA','CLAUDIO','LUIS', '917697325', '11/08/1996','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (11996940,'6', 'M', 'ORELLANA','SAAVEDRA','JUAN','MARTA', '997033681', '25/05/1979','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (14558221,'7', 'M', 'PASTEN','JORQUERA','ALAN','BALMACEDA', '967829417', '26/01/1957','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12459100,'8', 'M', 'POBLETE','FUENTES','SERGIO','TINGUIRIRICA', '942274800', '30/10/1965','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (8716085,'9', 'M', 'HORMAZABAL','SAGREDO','HUGO','DORSAL', '972141375', '15/02/1969','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12503185,'0', 'M', 'SILVA','GONZALEZ','PAUL','HOLANDA', '916258931', '17/12/1991','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (10586995,'1', 'M', 'MU?OZ','FERNANDEZ','JOSE','TORRES', '975855824', '23/05/2002','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (11949670,'2', 'M', 'CONTRERAS','MIRANDA','CLAUDIO','VISTA HERMOSA', '9848224457', '28/06/2004','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (9771046,'3', 'M', 'ZAMORANO','ELIZONDO','LUIS','ALAMEDA', '920951435', '24/11/1999','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12095272,'4', 'M', 'ROJAS','RODRIGUEZ','DAMASO','URMENETA', '941710643', '28/02/1982','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (14632410,'5', 'F', 'VILLANUEVA','YEPES','MONICA','GASPAR', '994545106', '24/07/1964','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (15353262,'K', 'M', 'BARRIOS','HIDALGO','LUIS','BALMACEDA', '905133944', '17/02/1995','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (4604866,'0', 'M', 'AGUIRRE','MU?OZ','LUIS','VICHUQUEN', '980751826', '01/02/1979','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (14148957,'1', 'M', 'MARTIN','DONOSO','JUAN','FLORENTINOS', '941705215', '20/09/1975','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12831482,'2', 'M', 'ORELLANA','GARRIDO','PATRICIO','GUAITECAS', '900923228', '14/08/1975','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12186256,'3', 'M', 'FUENTES','MORENO','MANUEL','HANOI', '945920102', '23/08/1985','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (11976208,'4', 'F', 'OPAZO','AGUILERA','MARIA','TILOS', '961331962', '04/12/1974','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12998853,'5', 'M', 'TRINKE','TRINKE','CRISTIAN','MANCO', '965657989', '26/01/1994','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12947165,'6', 'F', 'HISI','DIAZ','ROSA','INES', '982075185', '22/04/1971','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (13043565,'7', 'M', 'AGUILERA','ROMAN','WILLIBALDO','ANDES', '989304731', '09/08/1985','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (13072743,'8', 'M', 'ORELLANA','SERQUEIRA','JAIME','ABRIL', '942479230', '19/06/1997','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (16960649,'9', 'F', 'RIQUELME','CHAVEZ','ROCIO','BALMACEDA', '998917707', '15/06/2003','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12468646,'K', 'M', 'ALVAREZ','MU?OZ','MANUEL','EDUARDO', '933573047', '07/07/1974','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12656375,'5', 'M', 'SALDIAS','ROJAS','DAVID','TURISTAS', '996334257', '01/05/1968','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (11635470,'6', 'M', 'RAMIREZ','GUTIERREZ','JOEL','BELLA', '982874654', '19/10/1961','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (14415848,'7', 'M', 'MACHUCA','ADONIS','MIGUEL','JAZMINES', '918365770', '09/04/1993','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12241168,'8', 'M', 'RAMIREZ','GUTIERREZ','RODRIGO','RENNI', '913647073', '07/09/2002','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (9798044,'9', 'M', 'MALTRAIN','CORTES','JUAN','PINZA', '936223799', '15/12/1982','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12832359,'0', 'M', 'SALAS','TORO','CARLOS','LLEUQUE', '992139716', '05/11/1979','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12302426,'1', 'M', 'ALVARADO','ARAUNA','ALEX','CHONCHI', '930170600', '02/11/1958','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12859931,'2', 'M', 'CESPEDES','LANDEROS','CRISTIAN','BAUTISTA', '927886744', '12/09/1981','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12467533,'3', 'M', 'HERNANDEZ','DIAZ','JUAN','SALCEDO', '999832826', '22/03/1982','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12470801,'4', 'F', 'SANCHEZ','RIVERA','JACQUELINE','CERDA', '964671642', '14/06/1970','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (13035746,'5', 'M', 'LARA','LECAROS','DANIEL','FRANCISCO', '910699363', '04/03/1980','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12866998,'K', 'M', 'AVILA','RETAMALES','CRISTIAN','TURMALINA', '927111404', '31/07/1958','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (11872936,'0', 'M', 'VIDAL','OSSES','LUIS','IMPERIAL', '907565739', '28/08/1981','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (14526736,'1', 'F', 'VALENZUELA','MONTOYA','ROSA','GENARO', '970149076', '20/10/1957','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (9964101,'2', 'F', 'MENESES','RUBIO','CARLOS','MARTA', '986308448', '26/12/1989','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12495120,'3', 'M', 'RUIZ','BRIONES','CRISTIAN','FREIRINA', '999246729', '17/06/1964','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (13050707,'4', 'M', 'VALLE','CASTRIZELO','FREDY','PALERMO', '920729087', '30/08/1969','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12459400,'6', 'M', 'PICHIHUINCA','JORQUERA','RAFAEL','INGENIERO', '990022570', '23/08/2001','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12649413,'7', 'F', 'MANZANO','QUINTANILLA','JESSICA','MINERALE', '910992801', '30/09/1999','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12610458,'8', 'F', 'BARTLAU','VARGAS','MACARENA','MARIA', '961428070', '01/04/1983','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12364085,'9', 'M', 'ARAYA','CAMUS','FREDDY','CARRERA', '921424681', '19/04/1976','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12460769,'K', 'M', 'DAZA','GUERRERO','ERIC','HERRERA', '908698988', '12/07/1971','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (13072796,'5', 'F', 'MEDINA','CAMUS','WANDA','ICTINOS', '906658455', '12/03/1964','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
-INSERT INTO paciente VALUES (12649650,'6', 'M', 'CUADRA','DISSI','DIEGO','OLGA', '997949308', '26/07/1957','CORREOPRUEBA' || sq_mail.NEXTVAL || '@GMAIL.COM', 'PASSWORD');
+INSERT INTO paciente VALUES (10639521,'0', 'M', 'UVAL','RIQUELME','MIGUEL','SAN PABLO', '982718405', '20/07/1972','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (13074837,'1', 'M', 'AMENGUAL','SALDIAS','CESAR','CODORNICES', '966987936', '13/03/1961','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12251882,'2', 'M', 'MORICE','DONOSO','CLAUDIO','CHACALLUTA', '972615780', '13/03/1961','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (10238830,'3', 'M', 'SOTO','ARMAZAN','JUAN','MORELOS', '918169731', '17/05/1974','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12777063,'4', 'M', 'VILLENA','CAVERO','PABLO','NAVIDAD', '937531297', '12/10/1963','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12467572,'5', 'M', 'RIQUELME','BRIGNARDELLO','MIGUEL','AMERICO', '938516563', '26/07/1985','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12866487,'6', 'F', 'STOLLER','VARGAS','LORENA','BABURIZZA', '993166305', '20/09/1992','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (13463138,'7', 'M', 'BRAVO','HENRIQUEZ','PABLO','FLACO', '986406283', '05/12/1992','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (11657132,'8', 'M', 'ACU?A','BARRERA','RONNY','ASTRONOMICO', '983849127', '20/05/1990','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12487147,'9', 'M', 'MARIN','ARAVENA','JUAN','PALMAS', '968799322', '25/02/1981','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12817700,'K', 'F', 'VARGAS','GARAY','CLAUDIA','BELEN', '967329625', '25/05/1986','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (9499044,'5', 'M', 'ROJAS','ACHA','CLAUDIO','LUIS', '917697325', '11/08/1996','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (11996940,'6', 'M', 'ORELLANA','SAAVEDRA','JUAN','MARTA', '997033681', '25/05/1979','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (14558221,'7', 'M', 'PASTEN','JORQUERA','ALAN','BALMACEDA', '967829417', '26/01/1957','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12459100,'8', 'M', 'POBLETE','FUENTES','SERGIO','TINGUIRIRICA', '942274800', '30/10/1965','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (8716085,'9', 'M', 'HORMAZABAL','SAGREDO','HUGO','DORSAL', '972141375', '15/02/1969','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12503185,'0', 'M', 'SILVA','GONZALEZ','PAUL','HOLANDA', '916258931', '17/12/1991','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (10586995,'1', 'M', 'MU?OZ','FERNANDEZ','JOSE','TORRES', '975855824', '23/05/2002','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (11949670,'2', 'M', 'CONTRERAS','MIRANDA','CLAUDIO','VISTA HERMOSA', '9848224457', '28/06/2004','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (9771046,'3', 'M', 'ZAMORANO','ELIZONDO','LUIS','ALAMEDA', '920951435', '24/11/1999','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12095272,'4', 'M', 'ROJAS','RODRIGUEZ','DAMASO','URMENETA', '941710643', '28/02/1982','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (14632410,'5', 'F', 'VILLANUEVA','YEPES','MONICA','GASPAR', '994545106', '24/07/1964','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (15353262,'K', 'M', 'BARRIOS','HIDALGO','LUIS','BALMACEDA', '905133944', '17/02/1995','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (4604866,'0', 'M', 'AGUIRRE','MU?OZ','LUIS','VICHUQUEN', '980751826', '01/02/1979','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (14148957,'1', 'M', 'MARTIN','DONOSO','JUAN','FLORENTINOS', '941705215', '20/09/1975','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12831482,'2', 'M', 'ORELLANA','GARRIDO','PATRICIO','GUAITECAS', '900923228', '14/08/1975','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12186256,'3', 'M', 'FUENTES','MORENO','MANUEL','HANOI', '945920102', '23/08/1985','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (11976208,'4', 'F', 'OPAZO','AGUILERA','MARIA','TILOS', '961331962', '04/12/1974','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12998853,'5', 'M', 'TRINKE','TRINKE','CRISTIAN','MANCO', '965657989', '26/01/1994','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12947165,'6', 'F', 'HISI','DIAZ','ROSA','INES', '982075185', '22/04/1971','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (13043565,'7', 'M', 'AGUILERA','ROMAN','WILLIBALDO','ANDES', '989304731', '09/08/1985','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (13072743,'8', 'M', 'ORELLANA','SERQUEIRA','JAIME','ABRIL', '942479230', '19/06/1997','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (16960649,'9', 'F', 'RIQUELME','CHAVEZ','ROCIO','BALMACEDA', '998917707', '15/06/2003','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12468646,'K', 'M', 'ALVAREZ','MU?OZ','MANUEL','EDUARDO', '933573047', '07/07/1974','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12656375,'5', 'M', 'SALDIAS','ROJAS','DAVID','TURISTAS', '996334257', '01/05/1968','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (11635470,'6', 'M', 'RAMIREZ','GUTIERREZ','JOEL','BELLA', '982874654', '19/10/1961','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (14415848,'7', 'M', 'MACHUCA','ADONIS','MIGUEL','JAZMINES', '918365770', '09/04/1993','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12241168,'8', 'M', 'RAMIREZ','GUTIERREZ','RODRIGO','RENNI', '913647073', '07/09/2002','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (9798044,'9', 'M', 'MALTRAIN','CORTES','JUAN','PINZA', '936223799', '15/12/1982','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12832359,'0', 'M', 'SALAS','TORO','CARLOS','LLEUQUE', '992139716', '05/11/1979','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12302426,'1', 'M', 'ALVARADO','ARAUNA','ALEX','CHONCHI', '930170600', '02/11/1958','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12859931,'2', 'M', 'CESPEDES','LANDEROS','CRISTIAN','BAUTISTA', '927886744', '12/09/1981','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12467533,'3', 'M', 'HERNANDEZ','DIAZ','JUAN','SALCEDO', '999832826', '22/03/1982','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12470801,'4', 'F', 'SANCHEZ','RIVERA','JACQUELINE','CERDA', '964671642', '14/06/1970','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (13035746,'5', 'M', 'LARA','LECAROS','DANIEL','FRANCISCO', '910699363', '04/03/1980','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12866998,'K', 'M', 'AVILA','RETAMALES','CRISTIAN','TURMALINA', '927111404', '31/07/1958','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (11872936,'0', 'M', 'VIDAL','OSSES','LUIS','IMPERIAL', '907565739', '28/08/1981','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (14526736,'1', 'F', 'VALENZUELA','MONTOYA','ROSA','GENARO', '970149076', '20/10/1957','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (9964101,'2', 'F', 'MENESES','RUBIO','CARLOS','MARTA', '986308448', '26/12/1989','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12495120,'3', 'M', 'RUIZ','BRIONES','CRISTIAN','FREIRINA', '999246729', '17/06/1964','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (13050707,'4', 'M', 'VALLE','CASTRIZELO','FREDY','PALERMO', '920729087', '30/08/1969','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12459400,'6', 'M', 'PICHIHUINCA','JORQUERA','RAFAEL','INGENIERO', '990022570', '23/08/2001','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12649413,'7', 'F', 'MANZANO','QUINTANILLA','JESSICA','MINERALE', '910992801', '30/09/1999','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12610458,'8', 'F', 'BARTLAU','VARGAS','MACARENA','MARIA', '961428070', '01/04/1983','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12364085,'9', 'M', 'ARAYA','CAMUS','FREDDY','CARRERA', '921424681', '19/04/1976','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12460769,'K', 'M', 'DAZA','GUERRERO','ERIC','HERRERA', '908698988', '12/07/1971','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (13072796,'5', 'F', 'MEDINA','CAMUS','WANDA','ICTINOS', '906658455', '12/03/1964','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+INSERT INTO paciente VALUES (12649650,'6', 'M', 'CUADRA','DISSI','DIEGO','OLGA', '997949308', '26/07/1957','correodeprueba' || sq_mail.NEXTVAL || '@gmail.com', 'password');
+insert into paciente values (21729527, '0', 'M', 'APONTE', 'BRAVO', 'VICTOR', 'MAURICIO', '952325783', '11/07/1999', 'correo@correo.com', '123456789');
 
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '28-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 1,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '30-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 4,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '25-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 6,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '22-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 6,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '21-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 6,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '12-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 6,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '29-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 14, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '10-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 23, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '04-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 11, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '02-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 14, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '13-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 14, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '10-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 17, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '20-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 10, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '05-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 9,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '06-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 1,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '09-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 19, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '20-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 15, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '31-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 8,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '20-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 13, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '11-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 24, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '13-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 15, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '16-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 9,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '18-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 3,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '19-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null,14 , null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '23-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 21, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '02-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 3,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '01-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 7,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '16-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 15, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '11-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 7,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '10-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 23, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '11-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 9,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '16-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 18, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '13-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 18, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '23-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 1,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '15-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 18, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '26-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 23, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '20-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 16, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '02-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 16, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '01-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 7,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '15-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 17, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '19-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 17, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '28-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 3,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '17-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 19, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '27-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 6,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '26-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 4,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '02-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 19, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '06-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 11, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '08-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 3,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '06-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 24, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '12-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 6,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '11-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 6,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '03-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 6,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '03-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 7,  null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '25-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 21, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '24-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 10, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '23-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 12, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '26-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 12, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '25-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 14, null, 50);
-INSERT INTO agenda VALUES (sq_age.NEXTVAL, '11-09-2022', to_char(sysdate, 'hh24:mi'), 'Y', null, 25, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '28-09-2022', '09:45', 'N', null, 1,  21729527, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '30-09-2022', '16:00', 'N', null, 4,  21729527, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '25-09-2022', '16:15', 'N', null, 6,  21729527, 50);
 
-INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2000);
-INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2001);
-INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2002);
-INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2003);
-INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2004);
-INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2005);
-INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2006);
-INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2007);
-INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2008);
-INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2009);
+INSERT INTO solicitud VALUES(sq_soli.nextval, 'Urgente', 'Necesito con urgencia una hora a cardiologia. He buscado por todos lados y ésta es mi única opción', 'Y', null, '20-11-2022', null, null, 12610458);
+INSERT INTO solicitud VALUES(sq_soli.nextval, 'Urgente', 'Necesito con urgencia una hora a traumatologia. Se me cae una pierna', 'Y', null, '19-11-2022', null, null, 12364085);
+INSERT INTO solicitud VALUES(sq_soli.nextval, 'Urgente', 'Necesito con urgencia una hora a Ginecologia. Tengo una infección que incluso el olor me traspasa la ropa interior', 'Y', null, '20-11-2022', null, null, 12460769);
+INSERT INTO solicitud VALUES(sq_soli.nextval, 'Agendar hora', 'Necesito una hora a medicina general con cualquier medico y cualquier fecha', 'Y', null, '17-11-2022', null, null, 13072796);
+INSERT INTO solicitud VALUES(sq_soli.nextval, 'Agendar hora', 'Necesito una hora a medicina general con cualquier medico y cualquier fecha', 'Y', null, '15-11-2022', null, null, 12649650);
+
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '28-09-2022', '06:00', 'Y',null, 1,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '30-09-2022', '06:15', 'Y',null, 4,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '25-09-2022', '06:30', 'Y',null, 6,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '22-09-2022', '06:45', 'Y',null, 6,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '21-09-2022', '07:00', 'Y',null, 6,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '12-09-2022', '07:15', 'Y',null, 6,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '29-09-2022', '07:30', 'Y',null, 14, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '10-09-2022', '07:45', 'Y',null, 23, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '04-09-2022', '08:15', 'Y',null, 11, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '02-09-2022', '08:30', 'Y',null, 14, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '13-09-2022', '09:00', 'Y',null, 14, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '10-09-2022', '09:15', 'Y',null, 17, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '20-09-2022', '09:30', 'Y',null, 10, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '05-09-2022', '10:00', 'Y',null, 9,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '06-09-2022', '10:15', 'Y',null, 1,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '09-09-2022', '10:30', 'Y',null, 19, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '20-09-2022', '10:45', 'Y',null, 15, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '31-09-2022', '11:00', 'Y',null, 8,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '20-09-2022', '11:15', 'Y',null, 13, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '11-09-2022', '11:30', 'Y',null, 24, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '13-09-2022', '11:45', 'Y',null, 15, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '16-09-2022', '12:00', 'Y',null, 9,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '18-09-2022', '12:15', 'Y',null, 3,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '19-09-2022', '12:30', 'Y',null,14 , null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '23-09-2022', '12:45', 'Y',null, 21, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '02-09-2022', '13:00', 'Y',null, 3,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '01-09-2022', '13:15', 'Y',null, 7,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '16-09-2022', '13:30', 'Y',null, 15, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '11-09-2022', '13:45', 'Y',null, 7,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '10-09-2022', '14:00', 'Y',null, 23, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '11-09-2022', '14:15', 'Y',null, 9,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '16-09-2022', '14:30', 'Y',null, 18, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '13-09-2022', '15:00', 'Y',null, 18, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '23-09-2022', '15:15', 'Y',null, 1,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '15-09-2022', '15:30', 'Y',null, 18, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '26-09-2022', '15:45', 'Y',null, 23, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '20-09-2022', '16:00', 'Y',null, 16, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '02-09-2022', '16:15', 'Y',null, 16, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '01-09-2022', '16:45', 'Y',null, 7,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '15-09-2022', '17:00', 'Y',null, 17, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '19-09-2022', '17:15', 'Y',null, 17, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '28-09-2022', '17:30', 'Y',null, 3,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '17-09-2022', '17:45', 'Y',null, 19, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '27-09-2022', '18:15', 'Y',null, 6,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '26-09-2022', '18:30', 'Y',null, 4,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '02-09-2022', '18:45', 'Y',null, 19, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '06-09-2022', '19:00', 'Y',null, 11, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '08-09-2022', '19:15', 'Y',null, 3,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '06-09-2022', '19:30', 'Y',null, 24, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '12-09-2022', '20:00', 'Y',null, 6,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '11-09-2022', '20:30', 'Y',null, 6,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '03-09-2022', '20:45', 'Y',null, 6,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '03-09-2022', '21:15', 'Y',null, 7,  null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '25-09-2022', '21:30', 'Y',null, 21, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '24-09-2022', '21:45', 'Y',null, 10, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '23-09-2022', '22:00', 'Y',null, 12, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '26-09-2022', '22:15', 'Y',null, 12, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '25-09-2022', '22:45', 'Y',null, 14, null, 50);
+INSERT INTO agenda VALUES (sq_age.NEXTVAL, '11-09-2022', '23:00', 'Y',null, 25, null, 50);
+
+-- INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2000);
+-- INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2001);
+-- INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2002);
+-- INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2003);
+-- INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2004);
+-- INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2005);
+-- INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2006);
+-- INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2007);
+-- INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2008);
+-- INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2009);
 
 -- INSERT INTO atencion VALUES (sq_ate.NEXTVAL,'Especialista', 1, 5);
 -- INSERT INTO atencion VALUES (sq_ate.NEXTVAL,'Especialista', 2, 5);
@@ -456,16 +471,16 @@ INSERT INTO pago VALUES (sq_pag.NEXTVAL, 10000, 10000*0.19, 2009);
 -- INSERT INTO atencion VALUES (sq_ate.NEXTVAL,'Especialista', 9, 5);
 -- INSERT INTO atencion VALUES (sq_ate.NEXTVAL,'Especialista', 10, 5);
 
-INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 1, 3);
-INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 2, 3);
-INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 3, 3);
-INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 4, 3);
-INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 5, 3);
-INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 6, 3);
-INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 7, 3);
-INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 8, 3);
-INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 9, 3);
-INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 10, 3);
+-- INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 1, 3);
+-- INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 2, 3);
+-- INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 3, 3);
+-- INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 4, 3);
+-- INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 5, 3);
+-- INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 6, 3);
+-- INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 7, 3);
+-- INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 8, 3);
+-- INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 9, 3);
+-- INSERT INTO boleta VALUES (sq_bol.NEXTVAL, 11900, 10, 3);
 
 -- INSERT INTO comision VALUES (sq_comi.NEXTVAL, to_char(sysdate, 'dd-mm-yyyy'), 3000, 1, 1);
 -- INSERT INTO comision VALUES (sq_comi.NEXTVAL, to_char(sysdate, 'dd-mm-yyyy'), 3000, 4, 2);
@@ -482,6 +497,7 @@ commit;
 /
 
 -- Trigger
+DROP TRIGGER tr_comision;
 CREATE OR REPLACE TRIGGER tr_comision AFTER INSERT OR DELETE OR UPDATE OF id_medico, id_atencion ON atencion FOR EACH ROW
 DECLARE
 BEGIN
