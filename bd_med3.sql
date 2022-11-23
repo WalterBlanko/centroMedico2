@@ -185,6 +185,7 @@ CREATE TABLE comision (
     id_comision NUMBER NOT NULL CONSTRAINT pk_comision PRIMARY KEY,
     fecha_comision DATE NOT NULL,
     valor_comision NUMBER NOT NULL,
+    disponibilidad_comision char NOT NULL,
     id_medico number not null,
     id_atencion number not null,
     constraint fk_comision_medico foreign key (id_medico) references medico(id_medico),
@@ -502,7 +503,15 @@ CREATE OR REPLACE TRIGGER tr_comision AFTER INSERT OR DELETE OR UPDATE OF id_med
 DECLARE
 BEGIN
     IF inserting THEN
-        INSERT INTO comision VALUES(sq_com.NEXTVAL, to_char(sysdate, 'dd-mm-yyyy'), 3000, :new.id_medico, :new.id_atencion);
+        INSERT INTO comision VALUES(sq_com.NEXTVAL, to_char(sysdate, 'dd-mm-yyyy'), 3000, 'Y',:new.id_medico, :new.id_atencion);
     END IF;
 END tr_comision;
 /
+
+-- Procedure emitir informes
+
+-- Procedure emitir boleta
+
+-- Procedure registrar pago de comisiones (general)
+
+-- Procedure registrar pago de comisiones (por medico)

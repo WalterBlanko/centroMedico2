@@ -32,6 +32,10 @@ export class ConsultComponent implements OnInit {
     let id: any = (event.target as HTMLInputElement).value;
 
     this.db.updateAttention(Number(id)).subscribe();
-    this.router.navigate(['/']);
+    this.reload();
+  }
+
+  reload() {
+    window.location.reload();
   }
 }

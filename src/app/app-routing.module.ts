@@ -80,7 +80,7 @@ const routes: Routes = [
     component: MsgSendComponent
   },
   {
-    path: 'review',
+    path: 'review-requests',
     component: ReviewRequestsComponent
   },
   {
@@ -102,6 +102,10 @@ const routes: Routes = [
   {
     path: 'consult',
     component: ConsultComponent
+  },
+  {
+    path: 'commission',
+    component: CommissionComponent
   },
   {
     path: '**',

@@ -1,1 +1,33 @@
-<p>modify-prices works!</p>
+<!-- <div *ngIf="validatePassword == false">
+    <div>
+        <form>
+            <input type="password" placeholder="Ingrese contraseña">
+        </form>
+    </div>
+</div> -->
+
+<div *ngIf="validatePassword == true">
+    <div>
+            <tr>
+                <th># especialidad</th>
+                <th>Nombre de especialidad</th>
+                <th>Valor de especialidad</th>
+                <th>Valor a cambiar</th>
+            </tr>
+            <tr *ngFor="let i of speciality">
+                <td>{{ i.ID_ESPECIALIDAD }}</td>
+                <td>{{ i.NOMBRE_ESPECIALIDAD }}</td>
+                <td>{{ i.VALOR_ESPECIALIDAD }}</td>
+            </tr>
+            <div>
+                <tr>
+                    <input type="number" placeholder="Ingrese nuevo valor">
+                    <button>Cambiar</button>
+                </tr>
+            </div>
+    </div>
+</div>
+
+ID_ESPECIALIDAD
+NOMBRE_ESPECIALIDAD
+VALOR_ESPECIALIDAD

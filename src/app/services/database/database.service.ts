@@ -9,6 +9,7 @@ import { Confirm } from 'src/app/models/confirm';
 import { Condition } from 'src/app/models/condition';
 import { Payment } from 'src/app/models/payment';
 import { Attention } from 'src/app/models/attention';
+import { Agenda } from 'src/app/models/agenda';
 
 @Injectable({
   providedIn: 'root'
@@ -82,8 +83,14 @@ export class DatabaseService {
     return this.http.get(this.baseurl + `/payment-id/${agenda_id}`).pipe(retry(3), catchError(this.errorHandl));
   }
 
+  // Get attencion by medic ID
   getAttention(medic_id: any) {
     return this.http.get(this.baseurl + `/attention/${medic_id}`).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  // Get commission by medic ID
+  getCommissionByMedicId(medic_id: any) {
+    return this.http.get(this.baseurl + `/medic-commission/${medic_id}`).pipe(retry(3), catchError(this.errorHandl));
   }
 
   // --------------------------------------- Funtions ---------------------------------------------
@@ -174,6 +181,11 @@ export class DatabaseService {
   // Update attention status
   updateAttention(attention_id: any) {
     return this.http.post(this.baseurl + `/update-attention/${attention_id}`, {}).pipe(retry(3), catchError(this.errorHandl));
+  }
+
+  updateAgendaPatient(agenda: Agenda) {
+    console.log(agenda);
+    return this.http.post(this.baseurl + '/update-agenda-patient/', agenda).pipe(retry(3), catchError(this.errorHandl));
   }
 
   // Error handling

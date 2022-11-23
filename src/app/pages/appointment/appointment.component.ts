@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Observable } from 'rxjs';
 import { DatabaseService } from 'src/app/services/database/database.service';
+import { Agenda } from 'src/app/models/agenda';
 
 @Component({
   selector: 'app-appointment',
@@ -16,6 +16,8 @@ export class AppointmentComponent implements OnInit {
   esp_selected: any;
   doc_selected: any;
   age_selected: any;
+
+  confirmAgenda: Agenda = new Agenda;
 
   constructor(
     private db: DatabaseService
@@ -75,11 +77,16 @@ export class AppointmentComponent implements OnInit {
 
   getIdAgenda(event: Event) {
     this.age_selected = (event.target as HTMLInputElement).value;
-
-    console.log(Number(this.age_selected));
   }
 
   confirmHour() {
-    
+    this.db.authId.subscribe((value: any) => {
+      this.confirmAgenda = {
+        rut_paciente: value,
+        id_agenda: Number(this.age_selected)
+      }
+
+      this.db.updateAgendaPatient(this.confirmAgenda).subscribe();
+    });
   }
 }

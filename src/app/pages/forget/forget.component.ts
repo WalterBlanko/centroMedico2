@@ -29,5 +29,6 @@ export class ForgetComponent implements OnInit {
     let pass = this.forgetForm.get('password_paciente')?.value;
 
     this.db.forget(email, pass).subscribe();
+    this.router.navigate(['/']);
   }
 }

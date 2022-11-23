@@ -1,1 +1,32 @@
-<p>commission works!</p>
+<div>
+    <h2>Mis comisiones</h2>
+</div>
+<div>
+    <div>
+        <table>
+            <tr>
+                <th># atención</th>
+                <th>Fecha de comisión</th>
+                <th>Valor de comisión</th>
+            </tr>
+            <tr *ngFor="let i of commission">
+                <td>{{ i.ID_ATENCION }}</td>
+                <td>{{ i.FECHA_COMISION }}</td>
+                <td>{{ i.VALOR_COMISION }}</td>
+            </tr>
+            <div *ngIf="total == null || total == 0">
+                <tr>
+                    <td>Total disponible: 0</td>
+                </tr>
+            </div>
+            <div *ngIf="total > 0 || total != null">
+                <tr>
+                    <td>Total disponible: {{ total }}</td>
+                </tr>
+            </div>
+        </table>
+        <div>
+            <button (click)="issueCommission()">Emitir comisiones</button>
+        </div>
+    </div>
+</div>

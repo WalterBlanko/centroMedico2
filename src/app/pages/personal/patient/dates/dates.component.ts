@@ -57,6 +57,7 @@ export class DatesComponent implements OnInit {
         medic_id: Number(medic_id)
       }
 
+      console.log(this.attention);
       this.db.addAttention(this.attention).subscribe();
       
     });

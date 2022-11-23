@@ -987,6 +987,9 @@ app.post('/updateagenda', function (req, res, next) {
     var rut_paciente = req.body.rut_paciente;
     var id_agenda = req.body.id_agenda;
     var id_solicitud = req.body.id_solicitud;
+    console.log(rut_paciente
+        , id_agenda
+        , id_solicitud)
 
     oracledb.getConnection(connAttrs, function (err, connection) {
         if (err) {
@@ -1278,6 +1281,113 @@ app.post('/update-attention/:attention_id', function (req, res, next) {
         });
     });
 });
+
+// Get commission by medic id
+app.get('/medic-commission/:medic_id', function (req, res) {
+    "use strict";
+    var medic_id = req.params.medic_id;
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+        connection.execute(`
+        select
+            id_atencion,
+            valor_comision,
+            to_char(fecha_comision, 'dd-mm-yyyy') as fecha_comision,
+            (
+                select sum(valor_comision) from comision where id_medico = ${medic_id}
+            ) as total_comision
+        from comision  
+        where id_medico = ${medic_id}
+        `, {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.set('Content-Type', 'application/json');
+                res.status(500).send(JSON.stringify({
+                    status: 500,
+                    message: "Error getting the dba_tablespaces",
+                    detailed_message: err.message
+                }));
+            } else {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(result.rows));
+
+            }
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("GET /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
+});
+
+// Post reservation
+app.post('/update-agenda-patient/', function (req, res, next) {
+    var rut_paciente = req.body.rut_paciente;
+    var id_agenda = req.body.id_agenda;
+
+    oracledb.getConnection(connAttrs, function (err, connection) {
+        if (err) {
+            // Error connecting to DB
+            res.set('Content-Type', 'application/json');
+            res.status(500).send(JSON.stringify({
+                status: 500,
+                message: "Error connecting to DB",
+                detailed_message: err.message
+            }));
+            return;
+        }
+
+        connection.execute(`update agenda set disponibilidad_agenda = 'N', rut_paciente = ${rut_paciente} where id_agenda = ${id_agenda}`, {}, {
+            outFormat: oracledb.OBJECT // Return the result as Object
+        }, function (err, result) {
+            if (err) {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify(err.message));
+            } else {
+                res.header('Access-Control-Allow-Origin', '*');
+                res.header('Access-Control-Allow-Headers', 'Content-Type');
+                res.header('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
+                res.contentType('application/json').status(200);
+                res.send(JSON.stringify("Ingreso exitoso"));
+            }
+
+            connection.commit();
+
+            // Release the connection
+            connection.release(
+                function (err) {
+                    if (err) {
+                        console.error(err.message);
+                    } else {
+                        console.log("POST /sendTablespace : Connection released");
+                    }
+                });
+        });
+    });
+});
+
 
 app.listen(3000, function () {
     console.log("http://localhost:3000");
