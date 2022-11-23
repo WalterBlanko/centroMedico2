@@ -9,6 +9,7 @@ import { DatabaseService } from 'src/app/services/database/database.service';
 export class AppComponent implements OnInit{
   email: any;
   login: any;
+  rol: any;
 
   constructor(
     private db: DatabaseService
@@ -27,11 +28,18 @@ export class AppComponent implements OnInit{
     this.db.authLogin.subscribe((value: any) => {
       this.login = value;
     })
+
+    this.db.authRol.subscribe((value: any) => {
+      this.rol = value;
+    })
   }
 
   removeEmail() {
     let remove = "";
+    let removeRol = "";
+
     this.db.setEmail(remove);
+    this.db.setRol(removeRol);
   }
 
   logout() {

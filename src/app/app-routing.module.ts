@@ -33,7 +33,7 @@ const routes: Routes = [
     component: RequestComponent
   },
   {
-    path: 'home',
+    path: '',
     component: HomeComponent
   },
   {
@@ -100,7 +100,7 @@ const routes: Routes = [
     component: RequestsComponent
   },
   {
-    path: '',
+    path: 'consult',
     component: ConsultComponent
   },
   {

@@ -1186,7 +1186,6 @@ app.post('/payment/', function (req, res, next) {
 app.post('/add-attention/', function (req, res, next) {
     var payment_id = req.body.payment_id;
     var medic_id = req.body.medic_id;
-    console.log(payment_id, medic_id);
 
     oracledb.getConnection(connAttrs, function (err, connection) {
         if (err) {

@@ -58,6 +58,7 @@ export class DatesComponent implements OnInit {
       }
 
       this.db.addAttention(this.attention).subscribe();
+      
     });
   }
 }

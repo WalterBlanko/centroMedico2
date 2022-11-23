@@ -125,6 +125,15 @@ export class DatabaseService {
     this.personal_id.next(personal_id);
   }
 
+  // Chamullo de permiso
+  private perm_rol = new BehaviorSubject<any>({});
+  authRol = this.perm_rol.asObservable();
+
+  setRol(perm_rol: any) {
+    this.perm_rol.next(perm_rol);
+  }
+
+
   // ---------------------------------- POST SECTION ----------------------------------
   // Add pacient
   addPacient(user: Pacient): Observable<Pacient> {
@@ -158,6 +167,7 @@ export class DatabaseService {
 
   // Add attention
   addAttention(attention: Attention) {
+    console.log(attention);
     return this.http.post<Attention>(this.baseurl + '/add-attention/', attention).pipe(retry(3), catchError(this.errorHandl));
   }
 

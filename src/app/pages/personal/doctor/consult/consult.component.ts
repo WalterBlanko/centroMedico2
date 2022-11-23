@@ -9,7 +9,6 @@ import { DatabaseService } from 'src/app/services/database/database.service';
 })
 export class ConsultComponent implements OnInit {
   pacient: any[] = [];
-  ate: any;
 
   constructor(
     private db: DatabaseService,

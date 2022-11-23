@@ -11,6 +11,11 @@
         <td>{{ i.ID_ATENCION }}</td>
         <td>{{ i.ATENCION_PACIENTE }}</td>
         <td>{{ i.RUT_PACIENTE }}</td>
-        <td><button (click)="getId($event)" value="{{ i.ID_ATENCION }}">Marcar paciente atendido</button></td>
+        <div *ngIf="i.ATENCION_PACIENTE == 'EN ESPERA'">
+            <td><button (click)="getId($event)" value="{{ i.ID_ATENCION }}">Marcar paciente atendido</button></td>
+        </div>
+        <div *ngIf="i.ATENCION_PACIENTE == 'ATENDIDO'">
+            <td><button disabled="disabled">Paciente atendido</button></td>
+        </div>
     </tr>
 </div>
