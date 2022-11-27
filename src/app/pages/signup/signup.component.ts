@@ -12,6 +12,10 @@ import { DatabaseService } from 'src/app/services/database/database.service';
 export class SignupComponent implements OnInit {
   user: Pacient = new Pacient;
   signUpForm!: FormGroup;
+  existEmail?: boolean;
+  validRut?: boolean;
+  errorRut?: string;
+  errorEmail?: string;
 
   constructor(
     private router: Router,
@@ -35,14 +39,59 @@ export class SignupComponent implements OnInit {
   }
 
   addPatient() {
-    this.user = this.signUpForm.value;
-    // console.log(this.user)
+    var rut, email;
 
-    try {
+    this.user = this.signUpForm.value;
+
+    rut = this.validateRut(this.user.rut_paciente);
+    email = this.validateEmail(this.user.correo_paciente);
+
+    if (rut = true && (email = false)) {
       this.db.addPacient(this.user).subscribe();
       this.router.navigate(['/']);
-    } catch (error) {
-      console.log(error);
+    } else {
+      console.log('Error al añadir usuario');
     }
+  }
+
+  validateRut(rutC: any) {
+    if (!/^[0-9]+-[0-9kK]{1}$/.test(rutC)) return console.log(false);
+
+    const tmp = rutC.split('-');
+    const rut = tmp[0];
+    let dv = tmp[1];
+
+    if (dv == 'K') dv = 'K';
+
+    let validate = this.validateDv(rut) == dv;
+
+    if (validate) {
+      this.validRut = true;
+    } else {
+      this.validRut = false;
+    }
+  }
+
+  validateDv(T: any) {
+    var M = 0, S = 1;
+
+    for (; T; T = Math.floor(T / 10)) {
+      S = (S + T % 10 * (9 - M++ % 6)) % 11;
+    }
+    return S ? S - 1 : 'k';
+  }
+
+  validatePass(pass: any, pass2: any) {
+    if (pass != pass2) return false; else return true;
+  }
+
+  validateEmail(email: any) {
+    this.db.getPacientByMail(email).subscribe((value: any) => {
+      try {
+        this.existEmail = false;
+      } catch (error) {
+        this.existEmail = true;
+      }
+    });
   }
 }

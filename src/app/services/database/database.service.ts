@@ -28,6 +28,11 @@ export class DatabaseService {
     return this.http.get<Pacient>(this.baseurl + '/pacientes/').pipe(retry(3), catchError(this.errorHandl));
   }
 
+  // Get pacient by mail
+  getPacientByMail(email: any) {
+    return this.http.get(this.baseurl + `/pacientes/${email}`).pipe(retry(3), catchError(this.errorHandl));
+  }
+
   // Get medical centers by especiality id
   getCenters(id: any) {
     return this.http.get<any>(this.baseurl + '/medicalcenters/' + id).pipe(retry(3), catchError(this.errorHandl));

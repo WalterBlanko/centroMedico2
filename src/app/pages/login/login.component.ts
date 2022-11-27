@@ -24,13 +24,17 @@ export class LoginComponent implements OnInit {
 
   ngOnInit(): void {
     this.loginForm = new FormGroup({
+      // Empty
+      // correo_paciente: new FormControl('', Validators.required),
+      // password_paciente: new FormControl('', Validators.required)
+
       // Paciente
-      // correo_paciente: new FormControl('correo@correo.com', Validators.required),
-      // password_paciente: new FormControl('123456789', Validators.required)
+      correo_paciente: new FormControl('correo@correo.com', Validators.required),
+      password_paciente: new FormControl('123456789', Validators.required)
 
       // Doctor
-      correo_paciente: new FormControl('ma.galvezc@centrogalenos.cl', Validators.required),
-      password_paciente: new FormControl('MACLGACA23112022', Validators.required)
+      // correo_paciente: new FormControl('ma.galvezc@centrogalenos.cl', Validators.required),
+      // password_paciente: new FormControl('MACLGACA23112022', Validators.required)
 
       // Secretaria
       // correo_paciente: new FormControl('vi.aponte@personal.centrogalenos.cl', Validators.required),
@@ -93,8 +97,10 @@ export class LoginComponent implements OnInit {
         this.router.navigate(['/patient']);
       } else if(res == 3) {
         this.router.navigate(['/doctor']);
-      } else {
+      } else if(res == 2) {
         this.router.navigate(['/secretary']);
+      } else {
+        console.log('Error');
       }
     });
   }

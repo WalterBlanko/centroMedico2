@@ -33,7 +33,7 @@ const routes: Routes = [
     component: RequestComponent
   },
   {
-    path: '',
+    path: 'home',
     component: HomeComponent
   },
   {
@@ -41,7 +41,7 @@ const routes: Routes = [
     component: LoginComponent
   },
   {
-    path: 'signup',
+    path: '',
     component: SignupComponent
   },{
     path: 'forget',
