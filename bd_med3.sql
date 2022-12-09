@@ -507,11 +507,3 @@ BEGIN
     END IF;
 END tr_comision;
 /
-
--- Procedure emitir informes
-
--- Procedure emitir boleta
-
--- Procedure registrar pago de comisiones (general)
-
--- Procedure registrar pago de comisiones (por medico)

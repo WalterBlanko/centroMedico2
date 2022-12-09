@@ -6,11 +6,9 @@ import { AppComponent } from './app.component';
 import { HttpClientModule } from '@angular/common/http';
 
 import { AppointmentComponent } from './pages/appointment/appointment.component'
-import { ContactComponent } from './pages/contact/contact.component';
 import { ErrorComponent } from './pages/error/error.component';
 import { ForgetComponent } from './pages/forget/forget.component';
 import { HomeComponent } from './pages/home/home.component';
-import { LocationsComponent } from './pages/locations/locations.component';
 import { MsgSendComponent } from './pages/msg-send/msg-send.component';
 import { AdminComponent } from './pages/personal/admin/admin.component';
 import { DoctorComponent } from './pages/personal/doctor/doctor.component';
@@ -22,23 +20,19 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { TestingComponent } from './pages/testing/testing.component';
 import { RequestComponent } from './pages/request/request.component';
 import { ReviewRequestsComponent } from './pages/personal/secretary/review-requests/review-requests.component';
-import { ModifyPricesComponent } from './pages/personal/secretary/modify-prices/modify-prices.component';
 import { ReviewRequestIdComponent } from './pages/personal/secretary/review-request-id/review-request-id.component';
 import { DatesComponent } from './pages/personal/patient/dates/dates.component';
 import { RequestsComponent } from './pages/personal/patient/requests/requests.component';
 import { ConsultComponent } from './pages/personal/doctor/consult/consult.component';
 import { CommissionComponent } from './pages/personal/doctor/commission/commission.component';
-import { BoletaComponent } from './pages/personal/patient/boleta/boleta.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     AppointmentComponent,
-    ContactComponent,
     ErrorComponent,
     ForgetComponent,
     HomeComponent,
-    LocationsComponent,
     MsgSendComponent,
     AdminComponent,
     DoctorComponent,
@@ -49,13 +43,11 @@ import { BoletaComponent } from './pages/personal/patient/boleta/boleta.componen
     TestingComponent,
     RequestComponent,
     ReviewRequestsComponent,
-    ModifyPricesComponent,
     ReviewRequestIdComponent,
     DatesComponent,
     RequestsComponent,
     ConsultComponent,
-    CommissionComponent,
-    BoletaComponent
+    CommissionComponent
   ],
   imports: [
     BrowserModule,

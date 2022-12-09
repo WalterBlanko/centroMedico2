@@ -15,6 +15,7 @@ export class LoginComponent implements OnInit {
   email!: string;
   password!: string;
   navegationsextras?: NavigationExtras;
+  notFound: boolean = false;
 
   constructor(
     private router: Router,
@@ -29,7 +30,7 @@ export class LoginComponent implements OnInit {
       // password_paciente: new FormControl('', Validators.required)
 
       // Paciente
-      correo_paciente: new FormControl('correo@correo.com', Validators.required),
+      correo_paciente: new FormControl('correo@correo.cl', Validators.required),
       password_paciente: new FormControl('123456789', Validators.required)
 
       // Doctor
@@ -47,32 +48,35 @@ export class LoginComponent implements OnInit {
     let pass = this.loginForm.get('password_paciente')?.value;
 
     this.db.login(email).forEach(element => {
-      for(let i = 0; i < element.length; i++) {
-        const data = element[i];
-
-        if(email == data.CORREO_PACIENTE && pass == data.PASSWORD_PACIENTE) {
-          this.navegation(email, data.RUT_PACIENTE);
-          let rol = 4;
-          this.onSelectedRol(rol);
-          break;
+      if(element = []) {
+        this.notFound = true;
+      } else {
+        for (let i = 0; i < element.length; i++) {
+          const data = element[i];
+  
+          if (email == data.CORREO_PACIENTE && pass == data.PASSWORD_PACIENTE) {
+            this.navegation(email, data.RUT_PACIENTE);
+            let rol = 4;
+            this.onSelectedRol(rol);
+            break;
+          }
+  
+          if (email == data.CORREO_MEDICO && pass == data.PASSWORD_MEDICO) {
+            this.navegation(email, data.ID_MEDICO);
+            let rol = 3;
+            this.onSelectedRol(rol);
+            break;
+          }
+  
+          if (email == data.CORREO_PERSONAL && pass == data.PASSWORD_PERSONAL) {
+            this.navegation(email, data.ID_PERSONAL);
+            let rol = 2;
+            this.onSelectedRol(rol);
+            break;
+          }
         }
-
-        if(email == data.CORREO_MEDICO && pass == data.PASSWORD_MEDICO) {
-          this.navegation(email, data.ID_MEDICO);
-          let rol = 3;
-          this.onSelectedRol(rol);
-          break;
-        }
-
-        if(email == data.CORREO_PERSONAL && pass == data.PASSWORD_PERSONAL) {
-          this.navegation(email, data.ID_PERSONAL);
-          let rol = 2;
-          this.onSelectedRol(rol);
-          break;
-        }
-
-        console.log('Correo/Contraseña incorrectos');
       }
+
     });
   }
 
@@ -93,14 +97,12 @@ export class LoginComponent implements OnInit {
     this.onSelectedId(id);
 
     this.db.authRol.subscribe((res: any) => {
-      if(res == 4) {
+      if (res == 4) {
         this.router.navigate(['/patient']);
-      } else if(res == 3) {
+      } else if (res == 3) {
         this.router.navigate(['/doctor']);
-      } else if(res == 2) {
+      } else if (res == 2) {
         this.router.navigate(['/secretary']);
-      } else {
-        console.log('Error');
       }
     });
   }

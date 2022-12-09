@@ -14,6 +14,9 @@
                 <div class="form__div_button">
                     <button class="form__button" type="submit" [disabled]="loginForm.invalid">Iniciar sesión</button>
                 </div>
+                <div *ngIf="notFound == true">
+                    <label>Error en correo y/o contraseña.</label>
+                </div>
                 <div style="padding: 30px">
                     <div>
                         <label>¿No tienes cuenta? <a [routerLink]="['/signup']">Registrate aquí</a></label>
