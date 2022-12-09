@@ -21,6 +21,7 @@ export class ReviewRequestsComponent implements OnInit {
 
   ngOnInit(): void {
     this.getRequests(); 
+    this.db.isLogin();
   }
 
   onSelectedRequest(request: any) {

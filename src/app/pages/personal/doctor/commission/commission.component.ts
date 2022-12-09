@@ -16,6 +16,7 @@ export class CommissionComponent implements OnInit {
 
   ngOnInit(): void {
     this.getCommission();
+    this.db.isLogin();
   }
 
   getCommission() {

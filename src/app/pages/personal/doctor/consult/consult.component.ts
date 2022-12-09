@@ -17,6 +17,7 @@ export class ConsultComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAttention();
+    this.db.isLogin();
   }
 
   getAttention() {

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
-import { NavigationExtras, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { DatabaseService } from 'src/app/services/database/database.service';
 
 
@@ -14,7 +14,6 @@ export class LoginComponent implements OnInit {
   loginForm!: FormGroup;
   email!: string;
   password!: string;
-  navegationsextras?: NavigationExtras;
   notFound: boolean = false;
 
   constructor(
@@ -30,7 +29,7 @@ export class LoginComponent implements OnInit {
       // password_paciente: new FormControl('', Validators.required)
 
       // Paciente
-      correo_paciente: new FormControl('correo@correo.cl', Validators.required),
+      correo_paciente: new FormControl('correo@correo.com', Validators.required),
       password_paciente: new FormControl('123456789', Validators.required)
 
       // Doctor
@@ -47,36 +46,37 @@ export class LoginComponent implements OnInit {
     let email = this.loginForm.get('correo_paciente')?.value;
     let pass = this.loginForm.get('password_paciente')?.value;
 
-    this.db.login(email).forEach(element => {
-      if(element = []) {
-        this.notFound = true;
-      } else {
-        for (let i = 0; i < element.length; i++) {
-          const data = element[i];
-  
-          if (email == data.CORREO_PACIENTE && pass == data.PASSWORD_PACIENTE) {
-            this.navegation(email, data.RUT_PACIENTE);
-            let rol = 4;
-            this.onSelectedRol(rol);
-            break;
-          }
-  
-          if (email == data.CORREO_MEDICO && pass == data.PASSWORD_MEDICO) {
-            this.navegation(email, data.ID_MEDICO);
-            let rol = 3;
-            this.onSelectedRol(rol);
-            break;
-          }
-  
-          if (email == data.CORREO_PERSONAL && pass == data.PASSWORD_PERSONAL) {
-            this.navegation(email, data.ID_PERSONAL);
-            let rol = 2;
-            this.onSelectedRol(rol);
-            break;
-          }
-        }
-      }
+    this.db.login(email).subscribe((res: any) => {
+      if (res.length > 0) {
+        this.db.login(email).forEach(element => {
+          for (let i = 0; i < element.length; i++) {
+            const data = element[i];
 
+            if (email == data.CORREO_PACIENTE && pass == data.PASSWORD_PACIENTE) {
+              this.navegation(email, data.RUT_PACIENTE);
+              let rol = 4;
+              this.onSelectedRol(rol);
+              break;
+            }
+
+            if (email == data.CORREO_MEDICO && pass == data.PASSWORD_MEDICO) {
+              this.navegation(email, data.ID_MEDICO);
+              let rol = 3;
+              this.onSelectedRol(rol);
+              break;
+            }
+
+            if (email == data.CORREO_PERSONAL && pass == data.PASSWORD_PERSONAL) {
+              this.navegation(email, data.ID_PERSONAL);
+              let rol = 2;
+              this.onSelectedRol(rol);
+              break;
+            }
+          }
+        });
+      } else {
+        this.notFound = true;
+      }
     });
   }
 
@@ -106,4 +106,5 @@ export class LoginComponent implements OnInit {
       }
     });
   }
+
 }

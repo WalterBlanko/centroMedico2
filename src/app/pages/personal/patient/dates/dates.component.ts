@@ -24,6 +24,7 @@ export class DatesComponent implements OnInit {
   ngOnInit(): void {
     this.getDates();
     this.pago = false;
+    this.db.isLogin();
   }
 
   getDates() {
@@ -59,7 +60,6 @@ export class DatesComponent implements OnInit {
 
       console.log(this.attention);
       this.db.addAttention(this.attention).subscribe();
-      
     });
   }
 }

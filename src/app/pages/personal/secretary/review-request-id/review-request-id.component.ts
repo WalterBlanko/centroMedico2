@@ -37,6 +37,7 @@ export class ReviewRequestIdComponent implements OnInit {
   ngOnInit(): void {
     this.getRequest();
     this.getSpecialitys();
+    this.db.isLogin();
   }
 
   // Se obtiene la ID de la solicitud

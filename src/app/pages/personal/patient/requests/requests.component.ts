@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { DatabaseService } from 'src/app/services/database/database.service';
 
 @Component({
@@ -9,10 +10,14 @@ import { DatabaseService } from 'src/app/services/database/database.service';
 export class RequestsComponent implements OnInit {
   req: any[] = [];
 
-  constructor(private db: DatabaseService) { }
+  constructor(
+    private db: DatabaseService,
+    private router: Router
+  ) { }
 
   ngOnInit(): void {
     this.getRequest();
+    this.db.isLogin();
   }
 
   getRequest() {

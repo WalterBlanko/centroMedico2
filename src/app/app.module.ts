@@ -25,6 +25,7 @@ import { DatesComponent } from './pages/personal/patient/dates/dates.component';
 import { RequestsComponent } from './pages/personal/patient/requests/requests.component';
 import { ConsultComponent } from './pages/personal/doctor/consult/consult.component';
 import { CommissionComponent } from './pages/personal/doctor/commission/commission.component';
+import { NotPermissionComponent } from './pages/not-permission/not-permission.component';
 
 @NgModule({
   declarations: [
@@ -47,7 +48,8 @@ import { CommissionComponent } from './pages/personal/doctor/commission/commissi
     DatesComponent,
     RequestsComponent,
     ConsultComponent,
-    CommissionComponent
+    CommissionComponent,
+    NotPermissionComponent
   ],
   imports: [
     BrowserModule,

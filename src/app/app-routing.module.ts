@@ -19,6 +19,7 @@ import { DatesComponent } from './pages/personal/patient/dates/dates.component';
 import { RequestsComponent } from './pages/personal/patient/requests/requests.component';
 import { ConsultComponent } from './pages/personal/doctor/consult/consult.component';
 import { CommissionComponent } from './pages/personal/doctor/commission/commission.component';
+import { NotPermissionComponent } from './pages/not-permission/not-permission.component';
 
 const routes: Routes = [
   {
@@ -88,6 +89,10 @@ const routes: Routes = [
   {
     path: 'commission',
     component: CommissionComponent
+  },
+  {
+    path: 'not-permission',
+    component: NotPermissionComponent
   },
   {
     path: '**',

@@ -10,6 +10,7 @@ import { Condition } from 'src/app/models/condition';
 import { Payment } from 'src/app/models/payment';
 import { Attention } from 'src/app/models/attention';
 import { Agenda } from 'src/app/models/agenda';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root'
@@ -19,8 +20,10 @@ export class DatabaseService {
   // URL
   baseurl = 'http://localhost:3000';
 
-  constructor(private http: HttpClient) {
-  }
+  constructor(
+    private http: HttpClient,
+    private router: Router
+  ) {}
 
   // ---------------------------------- GET SECTION ----------------------------------
   // Get pacientes
@@ -112,7 +115,7 @@ export class DatabaseService {
   selectedEmail = this.email_pacient.asObservable();
 
   setEmail(email_pacient: any) {
-    if(email_pacient != "") {
+    if (email_pacient != "") {
       this.email_pacient.next(email_pacient);
       this.setLogin(true);
     } else {
@@ -127,6 +130,14 @@ export class DatabaseService {
 
   setLogin(validateLogin: boolean) {
     this.validateLogin.next(validateLogin);
+  }
+
+  isLogin() {
+    var login = this.validateLogin.value;
+
+    if (login == false) {
+      this.router.navigate(['not-permission']);
+    }
   }
 
   // Get ID from the secretary or doctor when they login in the system
@@ -144,7 +155,6 @@ export class DatabaseService {
   setRol(perm_rol: any) {
     this.perm_rol.next(perm_rol);
   }
-
 
   // ---------------------------------- POST SECTION ----------------------------------
   // Add pacient
@@ -168,7 +178,7 @@ export class DatabaseService {
   }
 
   // Post request
-  addRequest(pacient_rut:any, request: Request) {
+  addRequest(pacient_rut: any, request: Request) {
     return this.http.post(this.baseurl + `/addrequest/${pacient_rut}`, request).pipe(retry(3), catchError(this.errorHandl));
   }
 
